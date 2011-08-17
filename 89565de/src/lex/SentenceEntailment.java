@@ -3,7 +3,13 @@ package lex;
 import java.util.List;
 
 public class SentenceEntailment {
-	
+
+	public SentenceEntailment(Sentence hypothesis, Sentence sentence,
+			 boolean decision) {
+		this.hypothesis = hypothesis;
+		this.sentence = sentence;
+		this.decision = decision;
+	}
 	/**
 	 * try to match every word in the hypothesis (hyponym) to ONE word in the
 	 * candidate sentence (hypernym) using the sentence's EntailingTerms.
@@ -21,10 +27,10 @@ public class SentenceEntailment {
 	private List<Entailment> findAllMatches() {
 		return null;
 	}
-	
+
 	private Sentence hypothesis;
 	private Sentence sentence;
 	private List<Entailment> entailments;
-	
+
 	private boolean decision;
 }
