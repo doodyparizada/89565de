@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 18:12:01 17/08/2011 by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="model.direct.Verbs" table="verbs" catalog="direct">
+        <composite-id name="id" class="model.direct.VerbsId">
+            <key-property name="lhs" type="string">
+                <column name="lhs" length="512" />
+            </key-property>
+            <key-property name="rhs" type="string">
+                <column name="rhs" length="512" />
+            </key-property>
+        </composite-id>
+        <property name="score" type="big_decimal">
+            <column name="score" precision="64" scale="30" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
