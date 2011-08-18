@@ -7,5 +7,9 @@ public class Word {
 		this.term = term;
 		this.original = original;
 	}
+	@Override
+	public String toString() {
+		return "Word [original=" + original + ", term=" + term + "]";
+	}
 
 }

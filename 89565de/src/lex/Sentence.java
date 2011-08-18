@@ -9,4 +9,9 @@ public class Sentence {
 		this.words = words;
 	}
 
+	@Override
+	public String toString() {
+		return "Sentence [words=" + words + "]";
+	}
+
 }

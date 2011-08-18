@@ -38,7 +38,10 @@ public class Parser {
 		//     create a Sentence
 		//     create SentenceEntailment, add to list
 		List<SentenceEntailment> sentenceEntailments = new ArrayList<SentenceEntailment>(10);
-		SentenceEntailment sentenceEntailment = null;
+		//SentenceEntailment sentenceEntailment = null;
+		if(!this.scanner.hasNext()){
+			return sentenceEntailments;
+		}
 		String nextBulk = this.scanner.next();
 		if(nextBulk.matches("Topic:\t[\\w\\d]+[\\s$]+")){
 			nextBulk = this.scanner.next();

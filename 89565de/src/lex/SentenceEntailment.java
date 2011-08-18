@@ -30,6 +30,13 @@ public class SentenceEntailment {
 
 	private Sentence hypothesis;
 	private Sentence sentence;
+	@Override
+	public String toString() {
+		return "SentenceEntailment [decision=" + decision + ", entailments="
+				+ entailments + ", hypothesis=" + hypothesis + ", sentence="
+				+ sentence + "]";
+	}
+
 	private List<Entailment> entailments;
 
 	private boolean decision;
