@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import pos.Pos;
+
 public class Parser {
 	static String NL = System.getProperty("line.separator");
 	public Parser(String filename) {
@@ -70,7 +72,7 @@ public class Parser {
 		Scanner scanner = new Scanner(next).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String[] tri = scanner.next().split(":");
-			words.add(new Word(new Term(tri[2], tri[0]), tri[1]));
+			words.add(new Word(new Term(tri[2], Pos.fromString(tri[0])), tri[1]));
 		}
 		return new Sentence(words);
 	}

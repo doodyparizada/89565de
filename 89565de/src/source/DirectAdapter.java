@@ -6,6 +6,8 @@ import java.util.List;
 import org.hibernate.StatelessSession;
 import org.hibernate.cfg.Configuration;
 
+import pos.Pos;
+
 import lex.Entailment;
 import lex.Term;
 import model.direct.Nouns;
@@ -27,7 +29,7 @@ public class DirectAdapter implements Source {
 	public List<Entailment> getEntailments(Term t) {
 		// TODO Auto-generated method stub
 		// use the imported DB to generate entailments.
-		String pos=t.getPos();
+		Pos pos= t.getPos();
 		String term=t.getTerm();
 		if(pos.equals("n")){
 			List<Nouns> entailedNounsList =
@@ -40,7 +42,7 @@ public class DirectAdapter implements Source {
 				List<Entailment> entailments = new ArrayList<Entailment>();
 				for(Nouns noun:entailedNounsList){
 					entailments.add(
-							new Entailment(t, new Term(noun.getId().getRhs(),"n"), noun.getScore(), this));
+							new Entailment(t, new Term(noun.getId().getRhs(),Pos.NOUN), noun.getScore(), this));
 				}
 				return entailments;
 			}
@@ -55,7 +57,7 @@ public class DirectAdapter implements Source {
 				List<Entailment> entailments = new ArrayList<Entailment>();
 				for(Verbs verb:entailedVerbsList){
 					entailments.add(
-							new Entailment(t, new Term(verb.getId().getRhs(),"v"), verb.getScore(), this));
+							new Entailment(t, new Term(verb.getId().getRhs(),Pos.VERB), verb.getScore(), this));
 				}
 				return entailments;
 			}

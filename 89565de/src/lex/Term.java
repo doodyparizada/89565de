@@ -1,10 +1,12 @@
 package lex;
 
+import pos.Pos;
+
 public class Term {
 	protected String term;
-	protected String pos;
+	protected Pos pos;
 	//protected String topic;
-	public Term(String term, String pos){
+	public Term(String term, Pos pos){
 		this.term = term;
 		this.pos = pos;
 	}
@@ -14,14 +16,14 @@ public class Term {
 	public void setTerm(String term) {
 		this.term = term;
 	}
-	public String getPos() {
+	public Pos getPos() {
 		return pos;
 	}
 	@Override
 	public String toString() {
 		return "Term [pos=" + pos + ", term=" + term + "]";
 	}
-	public void setPos(String pos) {
+	public void setPos(Pos pos) {
 		this.pos = pos;
 	}
 	@Override

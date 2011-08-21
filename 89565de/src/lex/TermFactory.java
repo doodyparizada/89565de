@@ -3,9 +3,11 @@ package lex;
 import java.util.HashMap;
 import java.util.Map;
 
+import pos.Pos;
+
 public class TermFactory {
 
-	public Term get(String term, String pos) {
+	public Term get(String term, Pos pos) {
 		String key = term+"_"+pos;
 		if (!map.containsKey(key)){
 			map.put(key,new Term(term,pos));
@@ -13,7 +15,7 @@ public class TermFactory {
 		return map.get(key);
 	}
 	
-	private Map<String,Term> map; 
+	private Map<String,Term> map;
 	
 	
 	// SINGLETON PATTERN

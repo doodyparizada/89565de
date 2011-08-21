@@ -20,5 +20,8 @@
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/jnisvmlight.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/doody/Downloads/jwnl14-rc2/jwnl.jar" sourcepath="/home/doody/Downloads/jwnl14-rc2/src"/>
+	<classpathentry kind="lib" path="/home/doody/Downloads/jwnl14-rc2/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/home/doody/Downloads/jwnl14-rc2/lib/junit-4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
