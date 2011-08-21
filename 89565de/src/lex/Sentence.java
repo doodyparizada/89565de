@@ -14,4 +14,16 @@ public class Sentence {
 		return "Sentence [words=" + words + "]";
 	}
 
+	public List<Word> getWords() {
+		return words;
+	}
+
+	public boolean containsTerm(Term term) {
+		for (Word w : words) {
+			if (w.getTerm().equals(term)) { 
+				return true;
+			}
+		}
+		return false;
+	}
 }

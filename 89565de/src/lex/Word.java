@@ -11,5 +11,8 @@ public class Word {
 	public String toString() {
 		return "Word [original=" + original + ", term=" + term + "]";
 	}
-
+	public Term getTerm() {
+		return term;
+	}
+	
 }

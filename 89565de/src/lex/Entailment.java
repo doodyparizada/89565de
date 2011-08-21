@@ -12,8 +12,24 @@ public class Entailment {
 		this.source = source;
 	}
 
-	private Term hyponym;
-	private Term hypernym;
+	/**
+	 * 
+	 * @return LHS - the entailing Term - Specific
+	 */
+	public Term getHyponym() {
+		return hyponym;
+	}
+	/**
+	 * 
+	 * @return RHS the entailed Term - General
+	 */
+	public Term getHypernym() {
+		return hypernym;
+	}
+	
+
+	private Term hyponym; // entails - LHS
+	private Term hypernym; // entailed - RHS
 	private BigDecimal score;
 	private Source source;
 	@Override
