@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+
 import pos.Pos;
 
 import net.didion.jwnl.JWNL;
@@ -38,10 +39,8 @@ public class WordNetAdapter implements Source {
 		InputStream is = new FileInputStream("wordnet.config.xml");
 			JWNL.initialize(is);
 		} catch (JWNLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -51,13 +50,14 @@ public class WordNetAdapter implements Source {
 		try {
 			// use JWNL API to return entailmetns.
 			Dictionary dict = Dictionary.getInstance();
-			IndexWord word = dict.lookupIndexWord(POS.NOUN, t.getTerm());
+			IndexWord word = dict.lookupIndexWord(translatePOS(t.getPos()), t.getTerm());
 			//System.out.println(word.getSenses()[0]);
 			//	PointerUtils pu = PointerUtils.getInstance();
 			//PointerTargetTree ptree = pu.getHypernymTree(word.getSense(2));
 
 			List<Entailment> entailments = new LinkedList<Entailment>();
 			for (Synset s : word.getSenses()) {
+				//System.out.println(s.getWords());
 				entailments.addAll((getSense(s, t, 1)));
 			}
 			return entailments;
@@ -75,27 +75,39 @@ public class WordNetAdapter implements Source {
 	 * @throws JWNLException
 	 */
     private List<Entailment> getSense(Synset s, Term t, double score) throws JWNLException {
-    	// get direct hypernyms (on level up)
-        PointerTargetNodeList hypernyms = PointerUtils.getInstance().getDirectHypernyms(s);
-        List<Entailment> entailments = new LinkedList<Entailment>();
-        
-        for(int i = 0; i < hypernyms.size(); i++){
-            Synset parentSyn = ((PointerTargetNode)hypernyms.get(i)).getSynset();
-            for(int j = 0; j < parentSyn.getWordsSize(); j++){
-            	// the entailed word
-            	Word hypernym = parentSyn.getWord(j);         	
-            	// create an Entailment object
-            	Entailment ent = new Entailment(t, TermFactory.instance.get(hypernym.getLemma(),
-            			translatePOS(hypernym.getPOS())),new BigDecimal(score), this);
-            	// add Enailment to the return list
-            	entailments.add(ent);
-            	// get parent entailments
-            	entailments.addAll(getSense(parentSyn,t, DEGRATE*score));
-            }
+    	List<Entailment> entailments = new LinkedList<Entailment>();
+    	for(int j = 0; j < s.getWordsSize(); j++){
+        	// the entailed word
+        	Word hypernym = s.getWord(j);
+        	// create an Entailment object
+        	Entailment ent = new Entailment(
+        			t,
+        			TermFactory.instance.get(
+        					hypernym.getLemma().replace("_", "-"),
+        					translatePOS(hypernym.getPOS())),
+        			new BigDecimal(score),
+        			this);
+        	// add Enailment to the return list
+        	entailments.add(ent);
         }
+    	
+    	// get parent entailments
+    	PointerTargetNodeList hypernyms = PointerUtils.getInstance().getDirectHypernyms(s);
+    	for(int i = 0; i < hypernyms.size(); i++){
+             Synset parentSyn = ((PointerTargetNode)hypernyms.get(i)).getSynset();
+             entailments.addAll(getSense(parentSyn,t, DEGRATE*score));
+    	}
+    	
         return entailments;
     }
 
+    private String repeat(String s, int num) {
+    	StringBuilder sb = new StringBuilder();
+    	for (int i = 0; i < num; i++) {
+			sb.append(s);
+		}
+    	return sb.toString();
+    }
     private Pos translatePOS(POS wnpos) {
     	if (wnpos == POS.NOUN) {
     		return Pos.NOUN;
@@ -105,6 +117,18 @@ public class WordNetAdapter implements Source {
     		return Pos.VERB;
     	} else 	if (wnpos == POS.ADVERB) {
     		return Pos.ADVERB;
+    	}
+    	return null;
+    }
+    private POS translatePOS(Pos pos) {
+    	if (pos == Pos.NOUN) {
+    		return POS.NOUN;
+    	} else 	if (pos == Pos.ADJECTIVE) {
+    		return POS.ADJECTIVE;
+    	} else 	if (pos == Pos.VERB) {
+    		return POS.VERB;
+    	} else 	if (pos == Pos.ADVERB) {
+    		return POS.ADVERB;
     	}
     	return null;
     }	

@@ -79,7 +79,7 @@ public class Entailment {
 	
 	@Override
 	public String toString() {
-		return "Entailment [hypernym=" + hypernym + ", hyponym=" + hyponym
+		return "Entailment [hyponym=" + hyponym + " --> hypernym=" + hypernym
 				+ ", score=" + score + ", source=" + source + "]";
 	}
 	
