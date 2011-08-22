@@ -51,7 +51,7 @@ public class WordNetAdapter implements Source {
 		try {
 			// use JWNL API to return entailmetns.
 			Dictionary dict = Dictionary.getInstance();
-			IndexWord word = dict.lookupIndexWord(POS.NOUN, "dog");
+			IndexWord word = dict.lookupIndexWord(POS.NOUN, t.getTerm());
 			//System.out.println(word.getSenses()[0]);
 			//	PointerUtils pu = PointerUtils.getInstance();
 			//PointerTargetTree ptree = pu.getHypernymTree(word.getSense(2));
