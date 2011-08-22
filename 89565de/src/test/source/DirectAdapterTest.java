@@ -23,6 +23,7 @@ import pos.Pos;
 import source.DirectAdapter;
 import source.Source;
 import source.SourceException;
+import source.SourceFactory;
 
 /**
  * @author mishraki
@@ -35,7 +36,12 @@ public class DirectAdapterTest {
 	 */
 	@Test
 	public final void testGetEntailments() throws SourceException {
-		Source source = new DirectAdapter();
+		
+		SourceFactory sfact = SourceFactory.getInstance();
+		sfact.clear();
+		DirectAdapter.register();
+		Source source = sfact.getSources().get(0);
+		
 		Term term = new Term("chair",  Pos.NOUN);
 		List<Entailment> target = new ArrayList<Entailment>();
 		/*"chair", "bench", "0.007152960000000000000000000000"

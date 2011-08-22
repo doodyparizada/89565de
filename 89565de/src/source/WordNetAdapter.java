@@ -27,7 +27,13 @@ import lex.TermFactory;
 
 public class WordNetAdapter implements Source {
 
-	public final double DEGRATE = 0.8;
+	/**
+	 * available only via SourceFactory
+	 */
+	private WordNetAdapter() {
+	}
+	
+	public static final double DEGRADE = 0.8;
 	
 	@Override
 	public String getName() {
@@ -95,7 +101,7 @@ public class WordNetAdapter implements Source {
     	PointerTargetNodeList hypernyms = PointerUtils.getInstance().getDirectHypernyms(s);
     	for(int i = 0; i < hypernyms.size(); i++){
              Synset parentSyn = ((PointerTargetNode)hypernyms.get(i)).getSynset();
-             entailments.addAll(getSense(parentSyn,t, DEGRATE*score));
+             entailments.addAll(getSense(parentSyn,t, DEGRADE*score));
     	}
     	
         return entailments;
@@ -131,5 +137,11 @@ public class WordNetAdapter implements Source {
     		return POS.ADVERB;
     	}
     	return null;
-    }	
+    }
+
+	public static void register() {
+		WordNetAdapter wn = new WordNetAdapter();
+		wn.init();
+		SourceFactory.getInstance().register(wn);
+	}	
 }

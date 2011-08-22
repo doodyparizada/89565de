@@ -5,10 +5,14 @@ import java.util.List;
 
 public class SentenceEntailment {
 
-	public SentenceEntailment(Sentence hypothesis, Sentence sentence,
-			 boolean decision) {
+	public SentenceEntailment(
+			Sentence hypothesis, 
+			Sentence sentence,
+			String topic,
+			boolean decision) {
 		this.hypothesis = hypothesis;
 		this.sentence = sentence;
+		this.topic = topic;
 		this.decision = decision;
 	}
 	/**

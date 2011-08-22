@@ -18,17 +18,15 @@ public class Parser {
 	static String NL = System.getProperty("line.separator");
 	public Parser(String filename) {
 		try {
-			this.scanner=new Scanner(new File(filename));
+			this.scanner = new Scanner(new File(filename));
 			this.scanner.useDelimiter("("+NL+")?Hypo:\t\\d+\t\\[");
-					//"(Topic:\t[\\D]+"+NL+")?Hypo:\t[\\d]+ ");
+				
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	/*boolean hasNext(){
-		return this.scanner.hasNext();
-	}*/
+
 	public List<SentenceEntailment> next() {
 		// get the next hypothesis and all of its candidate sentences.
 		// psudo code:
@@ -41,6 +39,7 @@ public class Parser {
 		//     create SentenceEntailment, add to list
 		List<SentenceEntailment> sentenceEntailments = new ArrayList<SentenceEntailment>(10);
 		//SentenceEntailment sentenceEntailment = null;
+		// XXX explain this line ????
 		if(!this.scanner.hasNext()){
 			return sentenceEntailments;
 		}
@@ -56,13 +55,17 @@ public class Parser {
 		Sentence hypo = extractSentence(bulkScanner.next());
 		while (bulkScanner.hasNext()) {
 			String candidateStr = bulkScanner.next().replaceFirst(NL,"");
-			boolean decision = candidateStr.charAt(candidateStr.length()-1)=='0'?false:true;
+			
+			// XXX decision is only in training mode
+			boolean decision = candidateStr.charAt(candidateStr.length()-1) != '0';
+			
 			sentenceEntailments.add(
-					new SentenceEntailment
-					(hypo,
-					extractSentence(candidateStr.replaceAll("\\] [01]","")),
-					decision ));
-			//System.out.println("candidate "+ bulkScanner.next());
+					new SentenceEntailment(
+							hypo,
+							extractSentence(candidateStr.replaceAll("\\] [01]","")),
+							currentTopic, // XXX where to we get the topic???
+							decision
+							));
 		}
 		return sentenceEntailments;
 	}
@@ -77,7 +80,7 @@ public class Parser {
 		return new Sentence(words);
 	}
 
-	private String currentTopic;
+	private String currentTopic = "";
 	private Scanner scanner;
 
 }

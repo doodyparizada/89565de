@@ -14,15 +14,21 @@ import org.junit.Test;
 
 import pos.Pos;
 
+import source.DirectAdapter;
+import source.Source;
 import source.SourceException;
+import source.SourceFactory;
 import source.WordNetAdapter;
 
 public class WordNetAdapterTest {
 	public WordNetAdapterTest() {
-		wn = new WordNetAdapter();
-		wn.init();
+		SourceFactory sfact = SourceFactory.getInstance();
+		sfact.clear();
+		WordNetAdapter.register();
+		wn = sfact.getSources().get(0);
 	}
-	private WordNetAdapter wn;
+	
+	private Source wn;
 	
 	@Test
 	public final void testGetNounEntailments() throws SourceException {
@@ -33,11 +39,11 @@ public class WordNetAdapterTest {
 		
 		Entailment[] expected = new Entailment[]{
 		new Entailment(t, new Term("dog", Pos.NOUN), new BigDecimal(1), wn),
-		new Entailment(t, new Term("canine", Pos.NOUN), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("carnivore", Pos.NOUN), new BigDecimal(1*wn.DEGRATE*wn.DEGRATE), wn),
-		new Entailment(t, new Term("bloke", Pos.NOUN), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("villain", Pos.NOUN), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("meat", Pos.NOUN), new BigDecimal(1*wn.DEGRATE*wn.DEGRATE), wn),
+		new Entailment(t, new Term("canine", Pos.NOUN), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("carnivore", Pos.NOUN), new BigDecimal(1*WordNetAdapter.DEGRADE*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("bloke", Pos.NOUN), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("villain", Pos.NOUN), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("meat", Pos.NOUN), new BigDecimal(1*WordNetAdapter.DEGRADE*WordNetAdapter.DEGRADE), wn),
 		};
 		
 		Assert.assertTrue(ents.containsAll(Arrays.asList(expected)));
@@ -52,11 +58,11 @@ public class WordNetAdapterTest {
 		Entailment[] expected = new Entailment[]{
 		new Entailment(t, new Term("flip", Pos.VERB), new BigDecimal(1), wn),
 		new Entailment(t, new Term("jerk", Pos.VERB), new BigDecimal(1), wn),
-		new Entailment(t, new Term("throw", Pos.VERB), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("touch", Pos.VERB), new BigDecimal(1*wn.DEGRATE*wn.DEGRATE), wn),
-		new Entailment(t, new Term("wink", Pos.VERB), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("peruse", Pos.VERB), new BigDecimal(1*wn.DEGRATE), wn),
-		new Entailment(t, new Term("radiate", Pos.VERB), new BigDecimal(1*wn.DEGRATE*wn.DEGRATE), wn),
+		new Entailment(t, new Term("throw", Pos.VERB), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("touch", Pos.VERB), new BigDecimal(1*WordNetAdapter.DEGRADE*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("wink", Pos.VERB), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("peruse", Pos.VERB), new BigDecimal(1*WordNetAdapter.DEGRADE), wn),
+		new Entailment(t, new Term("radiate", Pos.VERB), new BigDecimal(1*WordNetAdapter.DEGRADE*WordNetAdapter.DEGRADE), wn),
 		};
 		
 		Assert.assertTrue(ents.containsAll(Arrays.asList(expected)));

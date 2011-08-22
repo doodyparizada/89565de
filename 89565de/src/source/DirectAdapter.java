@@ -14,6 +14,8 @@ import model.direct.Nouns;
 import model.direct.Verbs;
 
 public class DirectAdapter implements Source {
+	
+	private DirectAdapter() {}
 	static StatelessSession statelessSession =
 		new Configuration().
 		configure().
@@ -90,4 +92,7 @@ public class DirectAdapter implements Source {
 		return true;
 	}
 
+	public static void register() {
+		SourceFactory.getInstance().register(new DirectAdapter());
+	}	
 }

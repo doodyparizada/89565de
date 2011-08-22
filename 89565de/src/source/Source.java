@@ -9,9 +9,9 @@ public interface Source {
 	 *
 	 * @return name of source
 	 */
-	String getName();
+	public String getName();
 	
-	List<Entailment> getEntailments(Term t) throws SourceException;
+	public List<Entailment> getEntailments(Term t) throws SourceException;
 	
 	@Override
 	public int hashCode();
