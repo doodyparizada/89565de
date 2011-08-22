@@ -47,8 +47,16 @@ public class SentenceEntailment {
 		return retval;
 	}
 
-	private Sentence hypothesis;
-	private Sentence sentence;
+
+	/**
+	 * from the assignment file:
+	 * topic-id hypothesis-id document-id sentence-id (the last 2 ids are of the entailing sentence)
+	 * @return a string in the format of the Result file
+	 */
+	public String getOutputString() {
+		return String.format("%s\t%s\t%s\t%s", topic, hypothesis.getSentenceId(), sentence.getDocumentId(), sentence.getSentenceId());
+	}
+	
 	@Override
 	public String toString() {
 		return "SentenceEntailment [decision=" + decision + ", entailments="
@@ -56,6 +64,25 @@ public class SentenceEntailment {
 				+ sentence + "]";
 	}
 
+	/**
+	 * 
+	 * @return a string in the format of the Rule application file
+	 */
+	public List<String> getRuleStrings() {
+		List<String> strings = new LinkedList<String>();
+		for (Entailment ent : entailments) {
+			strings.add(ent.getRuleString());
+		}
+		return strings;
+	}
+	
+	
+	private Sentence hypothesis;
+	private Sentence sentence;
+	/**
+	 * the topic ID of the entailment found in the given Set.
+	 */
+	private String topic;
 	private List<Entailment> entailments;
 
 	private boolean decision;

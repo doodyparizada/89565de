@@ -3,8 +3,6 @@ package lex;
 import java.util.List;
 
 public class Sentence {
-	private List<Word> words;
-
 	public Sentence(List<Word> words) {
 		this.words = words;
 	}
@@ -26,4 +24,21 @@ public class Sentence {
 		}
 		return false;
 	}
+
+	public String getSentenceId() {
+		return sentenceId;
+	}
+	public void setSentenceId(String sentenceId) {
+		this.sentenceId = sentenceId;
+	}
+	public String getDocumentId() {
+		return documentId;
+	}
+	public void setDocumentId(String documentId) {
+		this.documentId = documentId;
+	}
+	private String sentenceId;
+	private String documentId;
+	private List<Word> words;
+
 }

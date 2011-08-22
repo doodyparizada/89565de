@@ -26,12 +26,7 @@ public class Entailment {
 	public Term getHypernym() {
 		return hypernym;
 	}
-	
 
-	private Term hyponym; // entails - LHS
-	private Term hypernym; // entailed - RHS
-	private BigDecimal score;
-	private Source source;
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -74,10 +69,25 @@ public class Entailment {
 			return false;
 		return true;
 	}
+	/**
+	 * 
+	 * @return a string in the format of the Rule application file
+	 */
+	public String getRuleString() {
+		return String.format("%s\t%s\t%s", hyponym.term, hypernym.term, source.getName());
+	}
+	
 	@Override
 	public String toString() {
 		return "Entailment [hypernym=" + hypernym + ", hyponym=" + hyponym
 				+ ", score=" + score + ", source=" + source + "]";
 	}
+	
+	
+
+	private Term hyponym; // entails - LHS
+	private Term hypernym; // entailed - RHS
+	private BigDecimal score;
+	private Source source;
 
 }
