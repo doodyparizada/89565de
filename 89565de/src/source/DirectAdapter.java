@@ -1,5 +1,6 @@
 package source;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import model.direct.Nouns;
 import model.direct.Verbs;
 
 public class DirectAdapter implements Source {
-	
+
 	private DirectAdapter() {}
 	static StatelessSession statelessSession =
 		new Configuration().
@@ -27,44 +28,37 @@ public class DirectAdapter implements Source {
 		// TODO Auto-generated method stub
 		return name;
 	}
+	//XXX : what should I do when it's not in {v,n}??
 	@Override
 	public List<Entailment> getEntailments(Term t) {
 		// TODO Auto-generated method stub
 		// use the imported DB to generate entailments.
 		Pos pos= t.getPos();
 		String term=t.getTerm();
-		if(pos.equals("n")){
+		List<Entailment> entailments = new ArrayList<Entailment>();
+		entailments.add(new Entailment(t, t,new BigDecimal(1) , this));
+		if(pos.equals(Pos.NOUN)){
 			List<Nouns> entailedNounsList =
 				(List<Nouns>)statelessSession.
 				createQuery("from Nouns as n where n.id.lhs=:term").
 				setParameter("term",term).list();
-			if(entailedNounsList.isEmpty()){
-				return null;
-			}else{
-				List<Entailment> entailments = new ArrayList<Entailment>();
-				for(Nouns noun:entailedNounsList){
-					entailments.add(
-							new Entailment(t, new Term(noun.getId().getRhs(),Pos.NOUN), noun.getScore(), this));
-				}
-				return entailments;
+			for(Nouns noun:entailedNounsList){
+				entailments.add(
+						new Entailment(t, new Term(noun.getId().getRhs(),Pos.NOUN), noun.getScore(), this));
 			}
-		}else if(pos.equals("v")){
+			return entailments;
+		}else if(pos.equals(Pos.VERB)){
 			List<Verbs> entailedVerbsList =
 				(List<Verbs>)statelessSession.
 				createQuery("from Verbs as v where v.id.lhs=:term").
 				setParameter("term",term).list();
-			if(entailedVerbsList.isEmpty()){
-				return null;
-			}else{
-				List<Entailment> entailments = new ArrayList<Entailment>();
-				for(Verbs verb:entailedVerbsList){
-					entailments.add(
-							new Entailment(t, new Term(verb.getId().getRhs(),Pos.VERB), verb.getScore(), this));
-				}
-				return entailments;
+			for(Verbs verb:entailedVerbsList){
+				entailments.add(
+						new Entailment(t, new Term(verb.getId().getRhs(),Pos.VERB), verb.getScore(), this));
 			}
+			return entailments;
 		}else{
-			return null;
+			return entailments;
 		}
 
 	}
@@ -94,5 +88,5 @@ public class DirectAdapter implements Source {
 
 	public static void register() {
 		SourceFactory.getInstance().register(new DirectAdapter());
-	}	
+	}
 }

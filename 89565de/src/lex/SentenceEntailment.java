@@ -6,7 +6,7 @@ import java.util.List;
 public class SentenceEntailment {
 
 	public SentenceEntailment(
-			Sentence hypothesis, 
+			Sentence hypothesis,
 			Sentence sentence,
 			String topic,
 			boolean decision) {
@@ -14,6 +14,12 @@ public class SentenceEntailment {
 		this.sentence = sentence;
 		this.topic = topic;
 		this.decision = decision;
+	}
+	public SentenceEntailment(Sentence hypothesis, Sentence sentence,
+			String topic) {
+		this.hypothesis = hypothesis;
+		this.sentence = sentence;
+		this.topic = topic;
 	}
 	/**
 	 * try to match every word in the hypothesis (hyponym) to ONE word in the
@@ -29,7 +35,7 @@ public class SentenceEntailment {
 		// we want the maximum total weight of all edges chosen
 		// a node in LHS might have edges to more than one node in RHS
 		// and vise versa.
-		// this is a multi graph because different sources can create 
+		// this is a multi graph because different sources can create
 		// the same entailments (with diffent scores)
 		return null;
 	}
@@ -60,7 +66,7 @@ public class SentenceEntailment {
 	public String getOutputString() {
 		return String.format("%s\t%s\t%s\t%s", topic, hypothesis.getSentenceId(), sentence.getDocumentId(), sentence.getSentenceId());
 	}
-	
+
 	@Override
 	public String toString() {
 		return "SentenceEntailment [decision=" + decision + ", entailments="
@@ -69,7 +75,7 @@ public class SentenceEntailment {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return a string in the format of the Rule application file
 	 */
 	public List<String> getRuleStrings() {
@@ -79,8 +85,8 @@ public class SentenceEntailment {
 		}
 		return strings;
 	}
-	
-	
+
+
 	private Sentence hypothesis;
 	private Sentence sentence;
 	/**
