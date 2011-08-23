@@ -8,7 +8,7 @@ import lex.Sentence;
 // singleton
 public class FeatureManager {
 
-	List<Double> getFeatureVector(Sentence hypo) {
+	public List<Double> getFeatureVector(Sentence hypo) {
 		List<Double> scores = new LinkedList<Double>();	
 		for (Feature feat : features) {
 			scores.add(new Double(feat.score(hypo)));

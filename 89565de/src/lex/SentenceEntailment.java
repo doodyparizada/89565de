@@ -3,6 +3,8 @@ package lex;
 import java.util.LinkedList;
 import java.util.List;
 
+import classifier.FeatureManager;
+
 public class SentenceEntailment {
 
 	public SentenceEntailment(
@@ -22,7 +24,7 @@ public class SentenceEntailment {
 	 * @return
 	 */
 	private List<Entailment> findBestMatches() {
-		List<Entailment> allMatches = findAllMatches();
+	//	List<Entailment> allMatches = findAllMatches();
 		// need to create a competetive algorithm for the best matchs.
 		// we have a bipartite tree.
 		// we want to match all the RHS nodes
@@ -38,8 +40,7 @@ public class SentenceEntailment {
 	 * in the candidate sentence.
 	 * @return
 	 */
-	private List<Entailment> findAllMatches() {
-		List<Entailment> retval = new LinkedList<Entailment>();
+	private void findAllMatches() {
 		for (Word w : sentence.getWords()) {
 			EntailingTerm lhs = (EntailingTerm)w.getTerm();
 			for (Entailment ent : lhs.getEntailments()) {
@@ -55,7 +56,8 @@ public class SentenceEntailment {
 				}
 			}
 		}
-		return retval;
+		
+		featureScore = FeatureManager.getInstance().getFeatureVector(hypothesis);
 	}
 
 
@@ -87,7 +89,12 @@ public class SentenceEntailment {
 		return strings;
 	}
 	
-	
+
+	public  List<Double> getFeatureScore() {
+		return featureScore;
+	}
+	private  List<Double> featureScore;
+
 	private Sentence hypothesis;
 	private Sentence sentence;
 	/**
