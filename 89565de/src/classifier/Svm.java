@@ -19,7 +19,7 @@ public class Svm implements Classifier {
 		SVMLightInterface.SORT_INPUT_VECTORS = true;
 	}
 	@Override
-	public void addLearningExample(List<Feature> features, boolean doesEntail) {
+	public void addLearningExample(List<Double> features, boolean doesEntail) {
 		LabeledFeatureVector featureVector = toFeatureVector(features,doesEntail);
 		traindata.add(featureVector);
 	}
@@ -53,12 +53,12 @@ public class Svm implements Classifier {
 	}
 
 	@Override
-	public boolean doesEntail(List<Feature> features) {
+	public boolean doesEntail(List<Double> features) {
 		FeatureVector featureVector = toFeatureVector(features,null);
 		double d = model.classify(featureVector);
 		return d < 0.0? false:true;
 	}
-	private LabeledFeatureVector toFeatureVector(List<Feature> features,Boolean lable) {
+	private LabeledFeatureVector toFeatureVector(List<Double> features,Boolean lable) {
 		// TODO Auto-generated method stub
 		return null;
 	}

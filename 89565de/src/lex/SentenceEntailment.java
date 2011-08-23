@@ -41,10 +41,17 @@ public class SentenceEntailment {
 	private List<Entailment> findAllMatches() {
 		List<Entailment> retval = new LinkedList<Entailment>();
 		for (Word w : sentence.getWords()) {
-			EntailingTerm et = (EntailingTerm)w.getTerm();
-			for (Entailment ent : et.getEntailments()) {
-				if (hypothesis.containsTerm(ent.getHypernym())) {
-					retval.add(ent);
+			EntailingTerm lhs = (EntailingTerm)w.getTerm();
+			for (Entailment ent : lhs.getEntailments()) {
+				// add the term to the entailedTerms of the hypothesis
+				for (Word word : hypothesis.getWords()) {
+					if (word.getTerm().equals(ent.getHypernym())) {
+						EntailedTerm rhs = (EntailedTerm)word.getTerm();
+						rhs.addEntailment(ent);
+						break; // XXX break inner loop, because if there are more 
+						// than two same EntailedTerms in the hypothesis,
+						// they are the same instance from the factory. 
+					}
 				}
 			}
 		}

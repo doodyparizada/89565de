@@ -1,5 +1,7 @@
 package parser;
 
+import lex.EntailedTerm;
+import lex.EntailingTerm;
 import lex.Sentence;
 import lex.SentenceEntailment;
 import lex.Term;
@@ -52,7 +54,7 @@ public class Parser {
 		//
 		Scanner bulkScanner = new Scanner(nextBulk).useDelimiter(NL+"Sent:\t[\\S]+\t\\d+\t\\[");
 		//System.out.println("hypo "+ bulkScanner.next());
-		Sentence hypo = extractSentence(bulkScanner.next());
+		Sentence hypo = extractHypo(bulkScanner.next());
 		while (bulkScanner.hasNext()) {
 			String candidateStr = bulkScanner.next().replaceFirst(NL,"");
 			
@@ -75,11 +77,20 @@ public class Parser {
 		Scanner scanner = new Scanner(next).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String[] tri = scanner.next().split(":");
-			words.add(new Word(new Term(tri[2], Pos.fromString(tri[0])), tri[1]));
+			words.add(new Word(new EntailingTerm(tri[2], Pos.fromString(tri[0])), tri[1]));
 		}
 		return new Sentence(words);
 	}
-
+	// XXX yes its ugly... :(
+	private Sentence extractHypo(String next) {
+		List<Word> words = new ArrayList<Word>();
+		Scanner scanner = new Scanner(next).useDelimiter(", ");
+		while (scanner.hasNext()) {
+			String[] tri = scanner.next().split(":");
+			words.add(new Word(new EntailedTerm(tri[2], Pos.fromString(tri[0])), tri[1]));
+		}
+		return new Sentence(words);
+	}
 	private String currentTopic = "";
 	private Scanner scanner;
 
