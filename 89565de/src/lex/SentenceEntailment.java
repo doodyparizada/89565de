@@ -16,12 +16,18 @@ public class SentenceEntailment {
 		this.sentence = sentence;
 		this.topic = topic;
 		this.decision = decision;
+		this.isDecisionSet = true;
+		findAllMatches(); // generates the feature vector
 	}
-	public SentenceEntailment(Sentence hypothesis, Sentence sentence,
+	public SentenceEntailment(
+			Sentence hypothesis, 
+			Sentence sentence,
 			String topic) {
 		this.hypothesis = hypothesis;
 		this.sentence = sentence;
 		this.topic = topic;
+		this.isDecisionSet = false;
+		findAllMatches(); // generates the feature vector
 	}
 	/**
 	 * try to match every word in the hypothesis (hyponym) to ONE word in the
@@ -100,6 +106,18 @@ public class SentenceEntailment {
 	public  List<Double> getFeatureScore() {
 		return featureScore;
 	}
+	
+	public boolean DoesEntail() throws Exception{
+		if (! isDecisionSet) {
+			throw new Exception("decision not set!");
+		}
+		return decision;
+	}
+	
+	public void setDecision(boolean decision) {
+		isDecisionSet = true;
+		this.decision = decision;
+	}
 	private  List<Double> featureScore;
 
 	private Sentence hypothesis;
@@ -110,5 +128,7 @@ public class SentenceEntailment {
 	private String topic;
 	private List<Entailment> entailments;
 
+	private boolean isDecisionSet;
 	private boolean decision;
+
 }

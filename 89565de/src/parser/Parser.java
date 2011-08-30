@@ -21,9 +21,9 @@ public class Parser {
 	static String NL = System.getProperty("line.separator");
 	private boolean isTranining=false;
 	//public HashSet<String> posSet=new HashSet<String>();
-	public Parser(String filename,boolean isTranining) {
+	public Parser(String filename,boolean isTraining) {
 		try {
-			this.isTranining = isTranining;
+			this.isTranining = isTraining;
 			this.scanner = new Scanner(new File(filename));
 			this.scanner.useDelimiter("("+NL+")?Hypo:\t\\d+\t\\[");
 
