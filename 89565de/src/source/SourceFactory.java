@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SourceFactory {
 
-	
+
 	public List<Source> getSources() {
 		return sources;
 	}
@@ -16,11 +16,11 @@ public class SourceFactory {
 		sources.add(s);
 	}
 	private List<Source> sources;
-	
+
 	/*
 	 * Singleton
 	 */
-	
+
 	private SourceFactory() {
 		sources = new LinkedList<Source>();
 	}
@@ -31,4 +31,13 @@ public class SourceFactory {
 		return instance;
 	}
 	private static SourceFactory instance = null;
+
+	public Source getSource(String name) {
+		for(Source source:sources){
+			if(source.getName().equals(name)){
+				return source;
+			}
+		}
+		return null;
+	}
 }

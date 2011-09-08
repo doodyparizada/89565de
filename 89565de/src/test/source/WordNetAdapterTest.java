@@ -1,7 +1,6 @@
 package test.source;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.junit.Test;
 
 import pos.Pos;
 
-import source.DirectAdapter;
 import source.Source;
 import source.SourceException;
 import source.SourceFactory;
@@ -23,9 +21,14 @@ import source.WordNetAdapter;
 public class WordNetAdapterTest {
 	public WordNetAdapterTest() {
 		SourceFactory sfact = SourceFactory.getInstance();
-		sfact.clear();
-		WordNetAdapter.register();
-		wn = sfact.getSources().get(0);
+		sfact.clear();		
+		try {
+			WordNetAdapter.register();
+			wn = sfact.getSources().get(0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private Source wn;

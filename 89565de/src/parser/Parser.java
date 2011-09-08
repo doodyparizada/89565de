@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 import pos.Pos;
 
+
+
 public class Parser {
 	static String NL = System.getProperty("line.separator");
 	private boolean isTranining=false;
@@ -45,7 +47,6 @@ public class Parser {
 		//     create SentenceEntailment, add to list
 		List<SentenceEntailment> sentenceEntailments = new ArrayList<SentenceEntailment>(10);
 		//SentenceEntailment sentenceEntailment = null;
-		// XXX explain this line ????
 		//to indicate that there is no more data to parse returns null
 		if(!this.scanner.hasNext()){
 			return null;
@@ -53,23 +54,23 @@ public class Parser {
 		String nextBulk = this.scanner.next();
 		if(nextBulk.matches("Topic:\t[\\w\\d]+[\\s$]+")){
 			this.currentTopic=nextBulk.substring(7).trim();
-			System.out.println(currentTopic);
+			System.out.println("Topic: "+currentTopic);
 			nextBulk = this.scanner.next();
 		}
-		//System.out.println(nextBulk);
+
 		//first row of nextBulk is the hypo
 		//
 		Scanner bulkScanner = new Scanner(nextBulk).useDelimiter
 		(Pattern.compile("("+NL+"Sent:\t[\\S]+\t\\d+\t\\[)"
 				+"|("+NL+"Topic:\\t)"));
-		//System.out.println("hypo "+ bulkScanner.next());
+
 		Sentence hypo = extractSentence(bulkScanner.next(),true);
 
 		while (bulkScanner.hasNext()) {
 			String candidateStr=bulkScanner.next();
 			if(!bulkScanner.hasNext()){
 				if(candidateStr.matches("[\\w\\d]+[\\s$]+")){
-					this.currentTopic=candidateStr.trim();
+					this.currentTopic = candidateStr.trim();
 					System.out.println(this.currentTopic);
 					continue;
 				}
@@ -87,7 +88,7 @@ public class Parser {
 						new SentenceEntailment(
 								hypo,
 								extractSentence(candidateStr.replaceAll("\\] [01]",""),false),
-								currentTopic, // XXX where to we get the topic???
+								currentTopic,
 								decision
 						));
 			}else{
@@ -95,7 +96,7 @@ public class Parser {
 						new SentenceEntailment(
 								hypo,
 								extractSentence(candidateStr.replaceAll("\\] [01]",""),false),
-								currentTopic // XXX where to we get the topic???
+								currentTopic
 						));
 			}
 
@@ -109,7 +110,7 @@ public class Parser {
 		Scanner scanner = new Scanner(next).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String[] tri = scanner.next().split(":");
-			//posSet.add(tri[0]);
+	
 			Term term=isHypo?
 					new EntailedTerm(tri[2], Pos.fromString(tri[0]))
 					:new EntailingTerm(tri[2], Pos.fromString(tri[0]));
@@ -118,16 +119,7 @@ public class Parser {
 		}
 		return new Sentence(words);
 	}
-	/*// XXX yes its ugly... :(
-	private Sentence extractHypo(String next) {
-		List<Word> words = new ArrayList<Word>();
-		Scanner scanner = new Scanner(next).useDelimiter(", ");
-		while (scanner.hasNext()) {
-			String[] tri = scanner.next().split(":");
-			words.add(new Word(new EntailedTerm(tri[2], Pos.fromString(tri[0])), tri[1]));
-		}
-		return new Sentence(words);
-	}*/
+	
 	private String currentTopic = "";
 	private Scanner scanner;
 

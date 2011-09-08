@@ -14,7 +14,7 @@ public interface Classifier {
 	 */
 	void addLearningExample(List<Double> features, boolean doesEntail);
 	/**
-	 * crating a model made of the learning examples given
+	 * create a model made of the learning examples given
 	 */
 	void createModel();
 	/**
@@ -23,4 +23,5 @@ public interface Classifier {
 	 * @return true if the feature list belongs to an entailment, otherwise returns false
 	 */
 	boolean doesEntail(List<Double> features);
+	void readModelFromFile();
 }

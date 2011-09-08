@@ -20,7 +20,7 @@ public class SentenceEntailment {
 		findAllMatches(); // generates the feature vector
 	}
 	public SentenceEntailment(
-			Sentence hypothesis, 
+			Sentence hypothesis,
 			Sentence sentence,
 			String topic) {
 		this.hypothesis = hypothesis;
@@ -53,22 +53,26 @@ public class SentenceEntailment {
 	 * @return
 	 */
 	private void findAllMatches() {
+		// System.out.println("finding entailments for [" + sentence + "] to [" + hypothesis + "]");
+		//System.out.println("in find all mathces");
 		for (Word w : sentence.getWords()) {
 			EntailingTerm lhs = (EntailingTerm)w.getTerm();
+		//	System.out.println("finding matches for "+ lhs);
 			for (Entailment ent : lhs.getEntailments()) {
+			//	System.out.println("  entailment " + ent.getRuleString());
 				// add the term to the entailedTerms of the hypothesis
 				for (Word word : hypothesis.getWords()) {
 					if (word.getTerm().equals(ent.getHypernym())) {
 						EntailedTerm rhs = (EntailedTerm)word.getTerm();
 						rhs.addEntailment(ent);
-						break; // XXX break inner loop, because if there are more 
+						//break; // XXX break inner loop, because if there are more
 						// than two same EntailedTerms in the hypothesis,
-						// they are the same instance from the factory. 
+						// they are the same instance from the factory.
 					}
 				}
 			}
 		}
-		
+		sentence.clear();
 		featureScore = FeatureManager.getInstance().getFeatureVector(hypothesis);
 	}
 
@@ -101,19 +105,19 @@ public class SentenceEntailment {
 		return strings;
 	}
 
-	
+
 
 	public  List<Double> getFeatureScore() {
 		return featureScore;
 	}
-	
+
 	public boolean DoesEntail() throws Exception{
 		if (! isDecisionSet) {
 			throw new Exception("decision not set!");
 		}
 		return decision;
 	}
-	
+
 	public void setDecision(boolean decision) {
 		isDecisionSet = true;
 		this.decision = decision;

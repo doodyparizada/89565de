@@ -1,30 +1,44 @@
 package lex;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Sentence {
 	public Sentence(List<Word> words) {
 		this.words = words;
+		this.wordMap = new HashSet<Term>();
+		for (Word w: words) {
+			wordMap.add(w.getTerm());	
+		}
 	}
+	
+	private Set wordMap;
 
 	@Override
 	public String toString() {
-		return "Sentence [words=" + words + "]";
+		StringBuilder sb = new StringBuilder();
+		for (Word w : words) {
+			sb.append(w.getTerm() + ", ");
+		}
+		return sb.toString();
 	}
 
 	public List<Word> getWords() {
 		return words;
 	}
+	
 
 	public boolean containsTerm(Term term) {
-		for (Word w : words) {
-			if (w.getTerm().equals(term)) { 
-				return true;
-			}
-		}
-		return false;
+		return wordMap.contains(term);
 	}
 
+	public Term getTerm(Term t) {
+		if (wordMap.contains(t)) {
+			// have to implememt XXX
+		}
+	}
+	
 	public String getSentenceId() {
 		return sentenceId;
 	}
@@ -36,6 +50,10 @@ public class Sentence {
 	}
 	public void setDocumentId(String documentId) {
 		this.documentId = documentId;
+	}
+
+	public void clear() {
+		words.clear();
 	}
 	private String sentenceId;
 	private String documentId;

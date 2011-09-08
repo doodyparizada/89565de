@@ -9,6 +9,8 @@ import org.hibernate.cfg.Configuration;
 
 import pos.Pos;
 
+
+
 import lex.Entailment;
 import lex.Term;
 import model.direct.Nouns;
@@ -36,7 +38,7 @@ public class DirectAdapter implements Source {
 		Pos pos= t.getPos();
 		String term=t.getTerm();
 		List<Entailment> entailments = new ArrayList<Entailment>();
-		entailments.add(new Entailment(t, t,new BigDecimal(1) , this));
+		//entailments.add(new Entailment(t, t,new BigDecimal(1) , this));
 		if(pos.equals(Pos.NOUN)){
 			List<Nouns> entailedNounsList =
 				(List<Nouns>)statelessSession.

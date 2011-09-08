@@ -18,14 +18,14 @@ DEFAULT CHARACTER SET = ascii;
 CREATE TABLE direct.verbs LIKE direct.nouns;
 -- filling the nouns table
 LOAD DATA INFILE
-'C:/Documents and Settings/mishraki/git/89565de/89565de/DIRECT_nouns_200.txt'
+'../DIRECT_nouns_200.txt'
 INTO TABLE `direct`.`nouns`
 FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\r\n'
 ;
 -- filling the verbs table
 LOAD DATA INFILE
-'C:/Documents and Settings/mishraki/git/89565de/89565de/DIRECT_verbs_200.txt'
+'../DIRECT_verbs_200.txt'
 INTO TABLE `direct`.`verbs`
 FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\r\n'

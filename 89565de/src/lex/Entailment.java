@@ -13,14 +13,14 @@ public class Entailment {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return LHS - the entailing Term - Specific
 	 */
 	public Term getHyponym() {
 		return hyponym;
 	}
 	/**
-	 * 
+	 *
 	 * @return RHS the entailed Term - General
 	 */
 	public Term getHypernym() {
@@ -70,24 +70,43 @@ public class Entailment {
 		return true;
 	}
 	/**
-	 * 
+	 *
 	 * @return a string in the format of the Rule application file
 	 */
 	public String getRuleString() {
 		return String.format("%s\t%s\t%s", hyponym.term, hypernym.term, source.getName());
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Entailment [hyponym=" + hyponym + " --> hypernym=" + hypernym
 				+ ", score=" + score + ", source=" + source + "]";
 	}
-	
-	
 
+
+
+
+
+	public BigDecimal getScore() {
+		return score;
+	}
+
+	public void setScore(BigDecimal score) {
+		this.score = score;
+	}
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
 	private Term hyponym; // entails - LHS
 	private Term hypernym; // entailed - RHS
 	private BigDecimal score;
 	private Source source;
+
+
+
 
 }

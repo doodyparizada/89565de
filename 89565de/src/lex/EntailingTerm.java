@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import pos.Pos;
+
+
 import source.Source;
 import source.SourceException;
 import source.SourceFactory;
@@ -20,10 +22,9 @@ public class EntailingTerm extends Term {
 				e.printStackTrace();
 			}
 		};
-		
 	}
 	public List<Entailment> getEntailments(){
 		return entailments;
 	}
-	private List<Entailment> entailments; 
+	private List<Entailment> entailments;
 }

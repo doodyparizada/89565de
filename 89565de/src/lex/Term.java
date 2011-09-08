@@ -36,24 +36,17 @@ public class Term {
 	}
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Term other = (Term) obj;
-		if (pos == null) {
-			if (other.pos != null)
-				return false;
-		} else if (!pos.equals(other.pos))
-			return false;
-		if (term == null) {
-			if (other.term != null)
-				return false;
-		} else if (!term.equals(other.term))
-			return false;
-		return true;
+		Term other = (Term)obj;
+		boolean eqterm = other.term.equals(term);
+		boolean eqpos = other.pos.equals(pos);
+		/* if (eqterm && !eqpos)
+		System.out.println(
+				"me: [" + term + ":" + pos + "] == "
+				+ "other: [" + other.term + ":" + other.pos + "] "
+				+"pos " + eqpos
+		);*/
+		
+		return (eqterm && eqpos);
 	}
 
 }

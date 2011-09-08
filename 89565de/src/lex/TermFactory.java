@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pos.Pos;
+
+
 // XXX 2 maybe the factory isn't so good after all... :(
 // ask doody tomorrow
 public class TermFactory {
