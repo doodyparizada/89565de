@@ -23,7 +23,7 @@ public class Parser {
 	private int lineNum = 0;
 	private Pattern bulkPattern=Pattern.compile("("+NL+"Sent:\t)"//[\\S]+\t\\d+\t\\[)"
 			+"|("+NL+"Topic:\\t)");
-	private int i;
+
 	//public HashSet<String> posSet=new HashSet<String>();
 	public Parser(String filename,boolean isTraining) {
 		try {
@@ -32,7 +32,6 @@ public class Parser {
 			this.scanner.useDelimiter("("+NL+")?Hypo:\t");//\\d+\t\\[");
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -49,7 +48,6 @@ public class Parser {
 		//     create SentenceEntailment, add to list
 		List<SentenceEntailment> sentenceEntailments = new ArrayList<SentenceEntailment>(10);
 		//SentenceEntailment sentenceEntailment = null;
-		// XXX explain this line ????
 		//to indicate that there is no more data to parse returns null
 		if(!this.scanner.hasNext()){
 			return null;
@@ -60,12 +58,8 @@ public class Parser {
 			System.out.println("Topic: "+currentTopic);
 			nextBulk = this.scanner.next();
 		}
-		//System.out.println(nextBulk);
-		//first row of nextBulk is the hypo
-		//
 		Scanner bulkScanner = new Scanner(nextBulk).useDelimiter(this.bulkPattern);
 
-		//System.out.println("hypo "+ bulkScanner.next());
 		String hypoBulk=bulkScanner.next().replaceAll("[\\[\\]]","");
 
 		System.out.println(lineNum++);
@@ -77,21 +71,18 @@ public class Parser {
 			if(!bulkScanner.hasNext()){
 				if(candidateStr.matches("[\\w\\d]+[\\s$]+")){
 					this.currentTopic=candidateStr.trim();
-					System.out.println(this.currentTopic);
+					System.out.println("Topic: "+currentTopic);
 					continue;
 				}
 			}
 			candidateStr=candidateStr.trim();
-			// XXX decision is only in training mode
+
 			if(isTranining){
 				char desicionChar = candidateStr.charAt(candidateStr.length()-1);
 				if(desicionChar!='1'&&desicionChar!='0'){
 					System.err.println("desicion can't be made!");
 				}
 				boolean decision = desicionChar == '1';
-				//System.out.println(decision);
-				//
-				//System.out.println(candidateStr.replaceAll("(\\[)|(\\]\t[01])",""));
 				sentenceEntailments.add(
 						new SentenceEntailment(
 								hypo,
@@ -110,19 +101,10 @@ public class Parser {
 
 
 		}
-//		for (SentenceEntailment sentenceEntailment : sentenceEntailments) {
-//			try {
-//				System.out.println(sentenceEntailment.DoesEntail());
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
 		return sentenceEntailments;
 	}
 
 	private Sentence extractSentence(String next,boolean isHypo) {
-		//System.out.println("1> "+next);
 		//get documentId + sentenceId
 		String[] split = next.split("\t",3);
 		List<Word> words = new ArrayList<Word>();
@@ -134,7 +116,6 @@ public class Parser {
 		Scanner scanner = new Scanner(next).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String[] tri = scanner.next().split(":");
-			//posSet.add(tri[0]);
 			Term term=isHypo?
 					new EntailedTerm(new String(tri[2]), Pos.fromString(tri[0]))
 					:new EntailingTerm(new String(tri[2]), Pos.fromString(tri[0]));
@@ -149,10 +130,6 @@ public class Parser {
 			sentence.setSentenceId(split[1]);
 		}
 
-		//System.out.println("2> "+next+"\n3> "+sentence);
-		/*if(i++>5){
-			System.exit(1);
-		}*/
 		return sentence;
 	}
 

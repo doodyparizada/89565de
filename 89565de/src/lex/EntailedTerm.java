@@ -17,21 +17,14 @@ public class EntailedTerm extends Term {
 		entailments = new LinkedList<Entailment>();
 	}
 	public void addEntailment(Entailment ent) {
-	//	System.out.println("added " + ent + " to " + term);
 		entailments.add(ent);
 	}
 	public List<Entailment> getEntailments(){
 		return entailments;
 	}
+	public void clear() {
+		entailments.clear();
+	}
 	private List<Entailment> entailments;
-//	public List<Double> getScores(String source) {
-//		LinkedList<Double> scores = new LinkedList<Double>();
-//		for(Entailment entailment:entailments){
-//			if(entailment.getSource().equals(source)){
-//				scores.add(entailment.getScore());
-//			}
-//		}
-//		return scores;
-//	}
 
 }

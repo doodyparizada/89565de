@@ -34,18 +34,36 @@ public class SentenceEntailment {
 	 * candidate sentence (hypernym) using the sentence's EntailingTerms.
 	 * whilst maximizing the entailment scores.
 	 * @return
+	 * @throws SourceException 
 	 */
-	private List<Entailment> findBestMatches() {
+	private void findBestMatches() throws SourceException {
 	//	List<Entailment> allMatches = findAllMatches();
-		// need to create a competetive algorithm for the best matchs.
+		// need to create a competitive algorithm for the best matches.
 		// we have a bipartite tree.
 		// we want to match all the RHS nodes
 		// we want the maximum total weight of all edges chosen
 		// a node in LHS might have edges to more than one node in RHS
 		// and vise versa.
 		// this is a multi graph because different sources can create
-		// the same entailments (with diffent scores)
-		return null;
+		// the same entailments (with different scores)
+		
+		findAllMatches();
+		for (Word w : hypothesis.getWords()) {
+			EntailedTerm t = (EntailedTerm)w.getTerm();
+			List<Entailment> ents = t.getEntailments();
+			// do this only if there is more than one element
+			if (ents.size() > 1) {
+				Entailment maxEnt = ents.get(0);
+				for (Entailment ent : ents) {
+					if (ent.getScore() > maxEnt.getScore()) {
+						maxEnt = ent;
+					}
+				}
+				// found the max scored entailment, so we leave only that one in.
+				ents.clear();
+				ents.add(maxEnt);
+			}
+		}
 	}
 	/**
 	 * get all possible matches of a hyponym in the hypothesis to a hypernym
@@ -54,27 +72,18 @@ public class SentenceEntailment {
 	 * @throws SourceException
 	 */
 	private void findAllMatches() throws SourceException {
-		// System.out.println("finding entailments for [" + sentence + "] to [" + hypothesis + "]");
-		//System.out.println("in find all mathces");
 		for (Word w : sentence.getWords()) {
 			EntailingTerm lhs = (EntailingTerm)w.getTerm();
 			lhs.init(); // Gets the possible entailments
-		//	System.out.println("finding matches for "+ lhs);
 			for (Entailment ent : lhs.getEntailments()) {
 				// add the term to the entailedTerms of the hypothesis
 				EntailedTerm rhs = (EntailedTerm)hypothesis.getTerm(ent.getHypernym());
 				if (rhs != null) {
 						rhs.addEntailment(ent);
-						//break; // XXX break inner loop, because if there are more
-						// than two same EntailedTerms in the hypothesis,
-						// they are the same instance from the factory.
 				}
 			}
 			lhs.clear();
 		}
-
-		sentence.clear();
-		sentence = null;
 
 		featureScore = FeatureManager.getInstance().getFeatureVector(hypothesis);
 	}
@@ -86,16 +95,16 @@ public class SentenceEntailment {
 	 * @return a string in the format of the Result file
 	 */
 	public String getOutputString() {
-		hypothesis.getSentenceId();
-		 sentence.getDocumentId();
-		 sentence.getSentenceId();
-		return String.format("%s\t%s\t%s\t%s", topic, hypothesis.getSentenceId(), sentence.getDocumentId(), sentence.getSentenceId());
+		String hypeID = hypothesis.getSentenceId();
+		String docID = sentence.getDocumentId();
+		String sentID = sentence.getSentenceId();
+		return String.format("%s\t%s\t%s\t%s", topic, hypeID, docID, sentID);
 	}
 
 	@Override
 	public String toString() {
-		return "SentenceEntailment [decision=" + decision + ", entailments="
-				+ entailments + ", hypothesis=" + hypothesis + ", sentence="
+		return "SentenceEntailment [decision=" + decision 
+		+ ", hypothesis=" + hypothesis + ", sentence="
 				+ sentence + "]";
 	}
 
@@ -105,8 +114,11 @@ public class SentenceEntailment {
 	 */
 	public List<String> getRuleStrings() {
 		List<String> strings = new LinkedList<String>();
-		for (Entailment ent : entailments) {
-			strings.add(ent.getRuleString());
+		for (Word w : hypothesis.getWords()) {
+			EntailedTerm t = (EntailedTerm)w.getTerm();
+			for (Entailment ent : t.getEntailments()) {
+				strings.add(ent.getRuleString());
+			}
 		}
 		return strings;
 	}
@@ -130,8 +142,13 @@ public class SentenceEntailment {
 	}
 	public void init() throws SourceException {
 		findAllMatches(); // generates the feature vector
+	//	findBestMatches();
 	}
-
+	public void clear() {
+		sentence.clear();
+		hypothesis.clear();
+	}
+	
 	private  List<Double> featureScore;
 
 	private Sentence hypothesis;
@@ -140,7 +157,6 @@ public class SentenceEntailment {
 	 * the topic ID of the entailment found in the given Set.
 	 */
 	private String topic;
-	private List<Entailment> entailments;
 
 	private boolean isDecisionSet;
 	private boolean decision;

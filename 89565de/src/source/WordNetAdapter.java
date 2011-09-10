@@ -9,6 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import classifier.FeatureManager;
+import classifier.WordNetAdjectiveFeature;
+import classifier.WordNetAdverbFeature;
+import classifier.WordNetNounFeature;
+import classifier.WordNetVerbFeature;
+
 import pos.Pos;
 
 import net.sf.extjwnl.JWNLException;
@@ -30,14 +36,14 @@ public class WordNetAdapter implements Source {
 	/**
 	 * available only via SourceFactory
 	 */
-	private WordNetAdapter() {
-	}
+	private WordNetAdapter() {}
 
 	public static final double DEGRADE = 0.8;
 	private Dictionary dict;
 
 	public static String NAME = "wordnet";
 
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -65,17 +71,11 @@ public class WordNetAdapter implements Source {
 				return new LinkedList<Entailment>(entailments);
 			}
 			IndexWord word = dict.lookupIndexWord(translated_pos, t.getTerm());
-			//System.out.println(word.getSenses()[0]);
-			//	PointerUtils pu = PointerUtils.getInstance();
-			//PointerTargetTree ptree = pu.getHypernymTree(word.getSense(2));
 
 			if (word == null || word.getSenses().size() == 0) {
-			//	System.out.println(t.getTerm());
 				return new LinkedList<Entailment>(entailments);
 			}
-			// System.out.println(word);
 			for (Synset s : word.getSenses()) {
-				//System.out.println(s.getWords());
 				entailments.addAll((getSense(s, t, 1)));
 			}
 			return new LinkedList<Entailment>(entailments);
@@ -87,7 +87,7 @@ public class WordNetAdapter implements Source {
 			System.out.println("caught null pointer exception: "+ e);
 			System.out.println("continuing...");
 			return new LinkedList<Entailment>();
-		}catch (Exception e) { //XXX
+		} catch (Exception e) { // What can we do ...
 			System.out.println("caught exception: "+ e);
 			System.out.println("continuing...");
 			return new LinkedList<Entailment>();
@@ -111,8 +111,9 @@ public class WordNetAdapter implements Source {
         	// create an Entailment object
     		Term newTerm = new Term(hypernym.getLemma().replace("_", "-"),
 					translatePOS(hypernym.getPOS()));
-    		if (!newTerm.equals(t)) {
+    		if (newTerm.equals(t)) {
     			// let naive source deal with these
+		} else {
     			Entailment ent = new Entailment(
         			t,
         			newTerm,
@@ -160,8 +161,15 @@ public class WordNetAdapter implements Source {
     }
 
 	public static void register() throws Exception {
+		System.out.println("Registering WordNet Source");
 		WordNetAdapter wn = new WordNetAdapter();
 		wn.init();
+		// register itself to the source factory
 		SourceFactory.getInstance().register(wn);
+		// register direct specific features
+		FeatureManager.getInstance().addFeature(new WordNetNounFeature())
+		.addFeature(new WordNetAdjectiveFeature())
+		.addFeature(new WordNetVerbFeature())
+		.addFeature(new WordNetAdverbFeature());
 	}
 }

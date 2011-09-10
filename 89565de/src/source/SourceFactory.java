@@ -40,4 +40,13 @@ public class SourceFactory {
 		}
 		return null;
 	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Source source : sources) {
+			sb.append(source.getName() + " ");
+		}
+		return sb.toString();
+
+	}
 }

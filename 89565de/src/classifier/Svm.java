@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import source.SourceFactory;
+
 import jnisvmlight.FeatureVector;
 import jnisvmlight.LabeledFeatureVector;
 import jnisvmlight.SVMLightInterface;
@@ -18,12 +20,15 @@ public class Svm implements Classifier {
 	public Svm() {
 		SVMLightInterface.SORT_INPUT_VECTORS = true;
 	}
+	
+	public String generateModelName() {
+		return "model_" + SourceFactory.getInstance().toString().replace(' ', '_') + ".dat";
+	}
+	
 	@Override
 	public void addLearningExample(List<Double> features, boolean doesEntail) {
 		LabeledFeatureVector featureVector = toFeatureVector(features,doesEntail);
-	//	System.out.println("feature vector size "+features.size());
 		if(featureVector.size()>0){
-		//	System.out.println("vec "+  featureVector.size());
 			traindata.add(featureVector);
 		}
 	}
@@ -46,7 +51,7 @@ public class Svm implements Classifier {
 	    System.out.println(" DONE.");
 
 	    // Use this to store a model to a file or read a model from a URL.
-	    model.writeModelToFile("model.dat");
+	    model.writeModelToFile(generateModelName());
 	    try {
 			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("model.dat").toURI().toURL());
 		} catch (MalformedURLException e) {
@@ -61,7 +66,7 @@ public class Svm implements Classifier {
 	@Override
 	public void readModelFromFile() {
 	    try {
-			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("model.dat").toURI().toURL());
+			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File(generateModelName()).toURI().toURL());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,7 +78,6 @@ public class Svm implements Classifier {
 	}
 	@Override
 	public boolean doesEntail(List<Double> features) {
-		//System.out.println("does entail");
 		FeatureVector featureVector = toFeatureVector(features);
 		double d = model.classify(featureVector);
 		return d < 0.0? false:true;
@@ -107,7 +111,6 @@ public class Svm implements Classifier {
 		for(int i=0;i<features.size();i++){
 			Double val = features.get(i);
 			if(val>0){
-			//	System.out.println("val is " + val);
 				nVals++;
 			}
 		}

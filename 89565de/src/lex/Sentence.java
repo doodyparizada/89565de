@@ -53,6 +53,9 @@ public class Sentence {
 
 	public void clear() {
 		words.clear();
+		wordMap.clear();
+		words = null;
+		wordMap = null;
 	}
 	private String sentenceId;
 	private String documentId;

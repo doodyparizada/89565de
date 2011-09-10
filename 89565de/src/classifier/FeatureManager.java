@@ -1,19 +1,17 @@
 package classifier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.mapping.Array;
-
-import pos.Pos;
-
-
 import lex.Sentence;
 // singleton
 public class FeatureManager {
-
+	/**
+	 * 
+	 * @param hypo a sentence with EntailedTerms to extract features from.
+	 * @return a vector of scores. each score is from a different feature.
+	 */
 	public List<Double> getFeatureVector(Sentence hypo) {
 		List<Double> scores = new LinkedList<Double>();
 		for (Feature feat : features) {
@@ -21,34 +19,32 @@ public class FeatureManager {
 		}
 		return scores;
 	}
-
+	/**
+	 * 
+	 * @param f the feature to add to the manager
+	 */
+	public FeatureManager addFeature(Feature f) {
+		features.add(f);
+		return instance;
+	}
+	
 	List<Feature> features;
 
 
+	/**
+	 * Private Ctor.
+	 * Adds some general features to the feature map.
+	 */
 	private FeatureManager() {
-		features = Arrays.asList(new Feature[] {
-				new NaiveNouneFeature(),
-				new NaiveVerbFeature(),
-				new NaiveAdjectiveFeature(),
-				new NaiveAdverbFeature(),
-				new NaiveCarFeature(),
-				new NaiveOFeature(),
-				new NaivePFeature(),
-				new NaiveDFeature(),
-				new NaiveCFeature(),
-				new WordNetNounFeature(),
-				new WordNetAdjectiveFeature(),
-				new WordNetVerbFeature(),
-				new WordNetAdverbFeature(),
-				new DirectNounFeature(),
-				new DirectVerbFeature(),
+		features = new LinkedList<Feature>(Arrays.asList(new Feature[] {
 				new TotalFeature(),
 				new TotalScorelessFeature()
-
 				// add more features....
-		});
+		}));
 		}
-
+	/**
+	 * the singleton instance
+	 */
 	private static FeatureManager instance;
 	public static FeatureManager getInstance() {
 		if (instance == null){

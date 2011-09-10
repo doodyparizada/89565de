@@ -31,11 +31,20 @@ public class Main {
 		"\nOR   : progname " + DECIDE + " <filename> <resultFile> <ruleFile>" +
 		"\nOR   : progname " + EVALUATE + " <filename>" +
 		"\nOR   : progname " + TRAIN_EVALUATE + " <filename>";
+
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
+		try {
+			run(args);
+		} catch (UsageError e) {
+			System.out.println(USAGE);
+		}
+
+	}
+	private static void run(String[] args) throws Exception {
 		boolean isTraining = false;
 		boolean isEvaluate = false;
 		boolean isTrain_Evaluate = false;
@@ -43,7 +52,7 @@ public class Main {
 
 		// parse arguments:
 		if (args.length  < 2) {
-			throw new Exception(USAGE);
+			throw new UsageError();
 		}
 		// train the classifier
 		if (args[0].equals(TRAIN_EVALUATE)) {
@@ -54,23 +63,25 @@ public class Main {
 		} else if (args[0].equals(DECIDE)) {
 			isTraining = false;
 		} else if (args[0].equals(EVALUATE)) {
-				isTraining = true;
-				isEvaluate = true;
+			isTraining = true;
+			isEvaluate = true;
 		} else if (args[0].equals(__TEST)) {
-				is__test = true;
+			is__test = true;
 		} else {
-			throw new Exception(USAGE);
+			throw new UsageError();
 		}
 		String filename = args[1];
 		// init lexical sources
 		SourceFactory sfact = SourceFactory.getInstance();
 		sfact.clear();
-		DirectAdapter.register();
+
+
+	//	DirectAdapter.register();
 		WordNetAdapter.register();
 		NaiveSource.register();
-		System.out.println("after registrating");
+
 		// init parser
-		Parser parser = new Parser(filename, isTraining);	//	"Processed_DevSet.txt"
+		Parser parser = new Parser(filename, isTraining);
 
 		if (is__test) {
 			__test(parser);
@@ -101,7 +112,7 @@ public class Main {
 			}
 		}
 		System.out.println(total.size());
-		}
+	}
 
 	static private void train(Parser parser) throws Exception {
 		train(parser,0);
@@ -114,7 +125,6 @@ public class Main {
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
 			int limit = (int)(sentenceEntailments.size()*percent/100.);
-			System.out.println("limit " + limit);
 			while (sentenceEntailments.size() > limit) {
 				SentenceEntailment sentenceEntailment = sentenceEntailments.remove(0);
 				sentenceEntailment.init();
@@ -152,6 +162,7 @@ public class Main {
 						rulesStream.println(rule);
 					}
 				}
+				sentenceEntailment.clear();
 			}
 		}
 	}
@@ -173,7 +184,6 @@ public class Main {
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
 			int limit = (int)(sentenceEntailments.size()*percent/100.);
-			System.out.println("limit " + limit);
 			while (sentenceEntailments.size() > limit) {
 				sentenceEntailments.remove(0);
 			}
@@ -202,14 +212,17 @@ public class Main {
 		double percision = correctEntailmentsCount == 0.0 ? 0 : (100 * (double)(correctEntailmentsCount + EPSILON) / (foundEntailingCount  + EPSILON));
 		double F1 = correctEntailmentsCount == 0.0 ? 0 : ((2* recall * percision)/ (recall+percision));
 
-		System.out.println(
-				"doEntail: " + doEntailCount +
+		System.out.println("STATISTICS: " + 
+				"\ndoEntail: " + doEntailCount +
 				"\nfoundEntailingCount: " + foundEntailingCount +
 				"\ncorrectEntailmentsCount: " + correctEntailmentsCount +
 				"\nRecall: " + recall  +
 				"\nPercision: " + percision +
 				"\nF1: " + F1);
+		System.out.println("Used: " + SourceFactory.getInstance().toString());
+
 	}
+
 
 	private static double EPSILON = Double.MIN_VALUE;
 }
