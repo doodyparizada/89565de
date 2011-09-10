@@ -12,26 +12,28 @@ import lex.Word;
 
 public class Feature {
 	protected Pos pos;
-	protected Source source;
+	protected String source;
 
 	private double EPSILON = 0.0001;
 
 	public double score(Sentence hypo) {
 		int posOccurrencesCounter = 0;
-		BigDecimal entailed = new BigDecimal(0);
+		double avgSum = 0;
 		for (Word word : hypo.getWords()) {
 			EntailedTerm term = (EntailedTerm)word.getTerm();
-			if (term.getPos().equals(this.pos)) {
-				posOccurrencesCounter += 1;
-				List<BigDecimal> scores
-				= term.getScores(this.source);
-				for(BigDecimal score : scores)
-				/*if (term.getEntailments().size() > 0)*/{
-					entailed.add(score);
+			if (term.getPos() == pos) {
+				List<Entailment> ents = term.getEntailments();
+				double totalEntail = 0;
+				int sameSource = 0;
+				for(Entailment ent : ents)
+					if(ent.getSource().equals(source)){
+					totalEntail += ent.getScore();
+					sameSource += 1;
 				}
+				avgSum += totalEntail / sameSource;
+				posOccurrencesCounter += 1;
 			}
 		}
-		// return (entailed.doubleValue() + EPSILON)/(posOccurrencesCounter + EPSILON);
-		return (entailed.doubleValue())/(posOccurrencesCounter);
+		return (avgSum)/(posOccurrencesCounter);
 	}
 }

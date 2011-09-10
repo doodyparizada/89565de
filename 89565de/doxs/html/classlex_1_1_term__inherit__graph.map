@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlex_1_1_entailed_term.html" title="{lex.EntailedTerm\n||+ EntailedTerm()\l+ addEntailment()\l+ getEntailments()\l}" alt="" coords="5,256,133,363"/>
+<area shape="rect" id="node5" href="$classlex_1_1_entailing_term.html" title="{lex.EntailingTerm\n||+ EntailingTerm()\l+ init()\l+ getEntailments()\l+ clear()\l}" alt="" coords="158,249,287,370"/>
+</map>

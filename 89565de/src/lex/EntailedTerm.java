@@ -24,14 +24,14 @@ public class EntailedTerm extends Term {
 		return entailments;
 	}
 	private List<Entailment> entailments;
-	public List<BigDecimal> getScores(Source source) {
-		LinkedList<BigDecimal> scores = new LinkedList<BigDecimal>();
-		for(Entailment entailment:entailments){
-			if(entailment.getScore().equals(source)){
-				scores.add(entailment.getScore());
-			}
-		}
-		return scores;
-	}
+//	public List<Double> getScores(String source) {
+//		LinkedList<Double> scores = new LinkedList<Double>();
+//		for(Entailment entailment:entailments){
+//			if(entailment.getSource().equals(source)){
+//				scores.add(entailment.getScore());
+//			}
+//		}
+//		return scores;
+//	}
 
 }

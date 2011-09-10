@@ -2,11 +2,12 @@ package classifier;
 
 import pos.Pos;
 import source.SourceFactory;
+import source.WordNetAdapter;
 
 public class WordNetAdverbFeature extends Feature {
 	public WordNetAdverbFeature() {
 		this.pos=Pos.ADVERB;
-		this.source=SourceFactory.getInstance().getSource("wordnet");
+		this.source=WordNetAdapter.NAME;
 
 	}
 }

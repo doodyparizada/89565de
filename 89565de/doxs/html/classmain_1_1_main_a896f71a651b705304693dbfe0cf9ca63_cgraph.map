@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classsource_1_1_source_factory.html#ad55f9c397c9f8d89043b6210328993d0" title="source.SourceFactory.getInstance" alt="" coords="424,35,645,62"/>
+<area shape="rect" id="node5" href="$classsource_1_1_source_factory.html#a75a33c42878c9981e515b899ac3aa044" title="source.SourceFactory.clear" alt="" coords="181,187,363,214"/>
+<area shape="rect" id="node7" href="$classsource_1_1_direct_adapter.html#a119807663514927ad9bd103a581579c7" title="source.DirectAdapter.register" alt="" coords="177,86,367,113"/>
+<area shape="rect" id="node12" href="$classsource_1_1_word_net_adapter.html#afb1e5199b5495ab5c3bdc18dd6f42bec" title="source.WordNetAdapter.register" alt="" coords="168,137,376,163"/>
+<area shape="rect" id="node18" href="$classsource_1_1_naive_source.html#a45132fa6b070f07da84d89ed281fdfe2" title="source.NaiveSource.register" alt="" coords="180,35,364,62"/>
+<area shape="rect" id="node10" href="$classsource_1_1_source_factory.html#a3b1c854ec74292091b04b3b01e49a068" title="source.SourceFactory.register" alt="" coords="436,86,633,113"/>
+<area shape="rect" id="node14" href="$classsource_1_1_word_net_adapter.html#af9d640176d7b4e105a1b67651d04636b" title="source.WordNetAdapter.init" alt="" coords="443,137,626,163"/>
+</map>

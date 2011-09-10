@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlex_1_1_sentence.html#ac7c57d3f07d941e704274c0bc6f5a193" title="lex.Sentence.getWords" alt="" coords="237,5,395,32"/>
+<area shape="rect" id="node5" href="$classlex_1_1_term.html#aa39aef988a0021ade48ce54cd48137ca" title="lex.Term.getTerm" alt="" coords="255,56,377,83"/>
+<area shape="rect" id="node7" href="$classlex_1_1_term.html#afcab7e3ebc3f7e812095ad225c21efee" title="lex.Term.getPos" alt="" coords="257,107,375,133"/>
+<area shape="rect" id="node9" href="$classlex_1_1_entailed_term.html#aabd9f6bc8f640038f85859b3d35f1e97" title="lex.EntailedTerm.getEntailments" alt="" coords="211,157,421,184"/>
+</map>

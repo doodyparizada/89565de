@@ -3,6 +3,8 @@ package lex;
 import java.util.LinkedList;
 import java.util.List;
 
+import source.SourceException;
+
 import classifier.FeatureManager;
 
 public class SentenceEntailment {
@@ -17,7 +19,6 @@ public class SentenceEntailment {
 		this.topic = topic;
 		this.decision = decision;
 		this.isDecisionSet = true;
-		findAllMatches(); // generates the feature vector
 	}
 	public SentenceEntailment(
 			Sentence hypothesis,
@@ -27,7 +28,6 @@ public class SentenceEntailment {
 		this.sentence = sentence;
 		this.topic = topic;
 		this.isDecisionSet = false;
-		findAllMatches(); // generates the feature vector
 	}
 	/**
 	 * try to match every word in the hypothesis (hyponym) to ONE word in the
@@ -51,28 +51,31 @@ public class SentenceEntailment {
 	 * get all possible matches of a hyponym in the hypothesis to a hypernym
 	 * in the candidate sentence.
 	 * @return
+	 * @throws SourceException
 	 */
-	private void findAllMatches() {
+	private void findAllMatches() throws SourceException {
 		// System.out.println("finding entailments for [" + sentence + "] to [" + hypothesis + "]");
 		//System.out.println("in find all mathces");
 		for (Word w : sentence.getWords()) {
 			EntailingTerm lhs = (EntailingTerm)w.getTerm();
+			lhs.init(); // Gets the possible entailments
 		//	System.out.println("finding matches for "+ lhs);
 			for (Entailment ent : lhs.getEntailments()) {
-			//	System.out.println("  entailment " + ent.getRuleString());
 				// add the term to the entailedTerms of the hypothesis
-				for (Word word : hypothesis.getWords()) {
-					if (word.getTerm().equals(ent.getHypernym())) {
-						EntailedTerm rhs = (EntailedTerm)word.getTerm();
+				EntailedTerm rhs = (EntailedTerm)hypothesis.getTerm(ent.getHypernym());
+				if (rhs != null) {
 						rhs.addEntailment(ent);
 						//break; // XXX break inner loop, because if there are more
 						// than two same EntailedTerms in the hypothesis,
 						// they are the same instance from the factory.
-					}
 				}
 			}
+			lhs.clear();
 		}
+
 		sentence.clear();
+		sentence = null;
+
 		featureScore = FeatureManager.getInstance().getFeatureVector(hypothesis);
 	}
 
@@ -83,6 +86,9 @@ public class SentenceEntailment {
 	 * @return a string in the format of the Result file
 	 */
 	public String getOutputString() {
+		hypothesis.getSentenceId();
+		 sentence.getDocumentId();
+		 sentence.getSentenceId();
 		return String.format("%s\t%s\t%s\t%s", topic, hypothesis.getSentenceId(), sentence.getDocumentId(), sentence.getSentenceId());
 	}
 
@@ -122,6 +128,10 @@ public class SentenceEntailment {
 		isDecisionSet = true;
 		this.decision = decision;
 	}
+	public void init() throws SourceException {
+		findAllMatches(); // generates the feature vector
+	}
+
 	private  List<Double> featureScore;
 
 	private Sentence hypothesis;

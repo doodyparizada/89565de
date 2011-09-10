@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classlex_1_1_term.html" title="lex.Term" alt="" coords="5,31,77,57"/>
+<area shape="rect" id="node3" href="$classlex_1_1_entailed_term.html" title="lex.EntailedTerm" alt="" coords="127,5,246,32"/>
+<area shape="rect" id="node5" href="$classlex_1_1_entailing_term.html" title="lex.EntailingTerm" alt="" coords="125,56,248,83"/>
+</map>

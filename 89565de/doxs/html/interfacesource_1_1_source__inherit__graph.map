@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classsource_1_1_direct_adapter.html" title="{source.DirectAdapter\n|+ NAME\l~ statelessSession\l|+ getName()\l+ getEntailments()\l+ register()\l}" alt="" coords="5,183,149,305"/>
+<area shape="rect" id="node5" href="$classsource_1_1_naive_source.html" title="{source.NaiveSource\n|+ NAME\l|+ getEntailments()\l+ getName()\l+ register()\l}" alt="" coords="174,191,311,297"/>
+<area shape="rect" id="node7" href="$classsource_1_1_word_net_adapter.html" title="{source.WordNetAdapter\n|+ DEGRADE\l+ NAME\l|+ getName()\l+ init()\l+ getEntailments()\l+ register()\l}" alt="" coords="335,176,496,312"/>
+</map>

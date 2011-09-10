@@ -23,6 +23,7 @@ public class Svm implements Classifier {
 		LabeledFeatureVector featureVector = toFeatureVector(features,doesEntail);
 	//	System.out.println("feature vector size "+features.size());
 		if(featureVector.size()>0){
+		//	System.out.println("vec "+  featureVector.size());
 			traindata.add(featureVector);
 		}
 	}
@@ -37,14 +38,17 @@ public class Svm implements Classifier {
 	    tp.getLearningParameters().verbosity = 1;
 
 	    System.out.println("\nTRAINING SVM-light MODEL ..");
-	    LabeledFeatureVector[] a=new LabeledFeatureVector[traindata.size()];
-		model = trainer.trainModel(traindata.toArray(a), tp);
+	    LabeledFeatureVector[] a = traindata.toArray(new LabeledFeatureVector[0]);
+	 //   for (int i = 0; i < a.length; i++) {
+		//	System.err.println(a[i].getDimAt(0) + " " + a[i].getValueAt(0));
+	//	}
+		model = trainer.trainModel(a, tp);
 	    System.out.println(" DONE.");
 
 	    // Use this to store a model to a file or read a model from a URL.
-	    model.writeModelToFile("jni_model.dat");
+	    model.writeModelToFile("model.dat");
 	    try {
-			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("jni_model.dat").toURI().toURL());
+			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("model.dat").toURI().toURL());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,7 +61,7 @@ public class Svm implements Classifier {
 	@Override
 	public void readModelFromFile() {
 	    try {
-			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("jni_model.dat").toURI().toURL());
+			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File("model.dat").toURI().toURL());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,6 +73,7 @@ public class Svm implements Classifier {
 	}
 	@Override
 	public boolean doesEntail(List<Double> features) {
+		//System.out.println("does entail");
 		FeatureVector featureVector = toFeatureVector(features);
 		double d = model.classify(featureVector);
 		return d < 0.0? false:true;
@@ -88,18 +93,21 @@ public class Svm implements Classifier {
 		for(int i=0,k=0;i<features.size();i++){
 			Double val = features.get(i);
 			if(val>0){
-				dims[k]=i;
+				dims[k]=i+1;
 				vals[k]=val;
 				k++;
 			}
 		}
-		return new FeatureVector( dims, vals);//TODO:
+		FeatureVector fv =  new FeatureVector( dims, vals);
+		//fv.normalizeL2();
+		return fv;
 	}
 	private LabeledFeatureVector toFeatureVector(List<Double> features,Boolean blable) {
 		int nVals=0;
 		for(int i=0;i<features.size();i++){
 			Double val = features.get(i);
 			if(val>0){
+			//	System.out.println("val is " + val);
 				nVals++;
 			}
 		}
@@ -111,12 +119,14 @@ public class Svm implements Classifier {
 		for(int i=0,k=0;i<features.size();i++){
 			Double val = features.get(i);
 			if(val>0){
-				dims[k]=i;
+				dims[k]=i+1;
 				vals[k]=val;
 				k++;
 			}
 		}
-		return new LabeledFeatureVector(label, dims, vals);
+		LabeledFeatureVector lfv =  new LabeledFeatureVector(label, dims, vals);
+		//lfv.normalizeL2();
+		return lfv;
 	}
 
 }

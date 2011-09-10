@@ -24,11 +24,11 @@ public class DirectAdapter implements Source {
 		configure().
 		buildSessionFactory().
 		openStatelessSession();
-	String name =  "direct";
-	@Override
+	public static String NAME = "direct";
+
 	public String getName() {
 		// TODO Auto-generated method stub
-		return name;
+		return NAME;
 	}
 	//XXX : what should I do when it's not in {v,n}??
 	@Override
@@ -43,20 +43,20 @@ public class DirectAdapter implements Source {
 			List<Nouns> entailedNounsList =
 				(List<Nouns>)statelessSession.
 				createQuery("from Nouns as n where n.id.lhs=:term").
-				setParameter("term",term).list();
+				setParameter("term",term).setMaxResults(20).list();
 			for(Nouns noun:entailedNounsList){
 				entailments.add(
-						new Entailment(t, new Term(noun.getId().getRhs(),Pos.NOUN), noun.getScore(), this));
+						new Entailment(t, new Term(noun.getId().getRhs(),Pos.NOUN), noun.getScore().doubleValue(), getName()));
 			}
 			return entailments;
 		}else if(pos.equals(Pos.VERB)){
 			List<Verbs> entailedVerbsList =
 				(List<Verbs>)statelessSession.
 				createQuery("from Verbs as v where v.id.lhs=:term").
-				setParameter("term",term).list();
+				setParameter("term",term).setMaxResults(20).list();
 			for(Verbs verb:entailedVerbsList){
 				entailments.add(
-						new Entailment(t, new Term(verb.getId().getRhs(),Pos.VERB), verb.getScore(), this));
+						new Entailment(t, new Term(verb.getId().getRhs(),Pos.VERB), verb.getScore().doubleValue(), getName()));
 			}
 			return entailments;
 		}else{
@@ -64,29 +64,7 @@ public class DirectAdapter implements Source {
 		}
 
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DirectAdapter other = (DirectAdapter) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+
 
 	public static void register() {
 		SourceFactory.getInstance().register(new DirectAdapter());

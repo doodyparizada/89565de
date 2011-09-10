@@ -5,14 +5,9 @@ import lex.Entailment;
 import lex.Term;
 
 public interface Source {
-	/**
-	 *
-	 * @return name of source
-	 */
-	public String getName();
-	
 	public List<Entailment> getEntailments(Term t) throws SourceException;
-	
+
+	public String getName();
 	@Override
 	public int hashCode();
 	@Override

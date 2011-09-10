@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$interfacesource_1_1_source.html" title="source.Source" alt="" coords="5,56,112,83"/>
+<area shape="rect" id="node3" href="$classsource_1_1_direct_adapter.html" title="source.DirectAdapter" alt="" coords="169,5,313,32"/>
+<area shape="rect" id="node5" href="$classsource_1_1_naive_source.html" title="source.NaiveSource" alt="" coords="173,56,310,83"/>
+<area shape="rect" id="node7" href="$classsource_1_1_word_net_adapter.html" title="source.WordNetAdapter" alt="" coords="161,107,322,133"/>
+</map>

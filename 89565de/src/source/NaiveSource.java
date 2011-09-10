@@ -12,14 +12,14 @@ public class NaiveSource implements Source {
 	@Override
 	public List<Entailment> getEntailments(Term t) throws SourceException {
 		List<Entailment> l = new LinkedList<Entailment>();
-		l.add(new Entailment(t, t, new BigDecimal(1) , this));
+		l.add(new Entailment(t, t, 1 , getName()));
 		return l;
 	}
 
-	@Override
+	public static String NAME = "naive";
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "naive";
+		return NAME;
 	}
 	public static void register() {
 		SourceFactory.getInstance().register(new NaiveSource());

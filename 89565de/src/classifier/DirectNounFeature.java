@@ -1,11 +1,11 @@
 package classifier;
 
 import pos.Pos;
-import source.SourceFactory;
+import source.DirectAdapter;
 
 public class DirectNounFeature extends Feature {
 	public DirectNounFeature() {
 		this.pos=Pos.NOUN;
-		this.source=SourceFactory.getInstance().getSource("direct");
+		this.source = DirectAdapter.NAME;
 	}
 }

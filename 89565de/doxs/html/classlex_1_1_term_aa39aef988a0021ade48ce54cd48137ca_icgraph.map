@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classsource_1_1_direct_adapter.html#a376dfd52e2fbe9f312cdd0c396f5c689" title="source.DirectAdapter.getEntailments" alt="" coords="180,5,415,32"/>
+<area shape="rect" id="node5" href="$classclassifier_1_1_feature.html#a69d3403aebefc860339d1a9f8598ccd0" title="classifier.Feature.score" alt="" coords="219,56,376,83"/>
+<area shape="rect" id="node7" href="$classclassifier_1_1_total_feature.html#a0efd85eb482d1fbd6a5c868ebe0759d8" title="classifier.TotalFeature.score" alt="" coords="205,107,390,133"/>
+<area shape="rect" id="node9" href="$classclassifier_1_1_total_scoreless_feature.html#a261d89ffa146c8a3142703a69c630c1f" title="classifier.TotalScorelessFeature.score" alt="" coords="176,157,419,184"/>
+</map>

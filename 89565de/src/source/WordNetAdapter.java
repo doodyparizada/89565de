@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import pos.Pos;
 
@@ -33,14 +35,16 @@ public class WordNetAdapter implements Source {
 
 	public static final double DEGRADE = 0.8;
 	private Dictionary dict;
-	@Override
+
+	public static String NAME = "wordnet";
+
 	public String getName() {
-		return "wordnet";
+		return NAME;
 	}
 
 	public void init() throws Exception {
 		try {
-			InputStream is = new FileInputStream("wordnet.config.xml");			
+			InputStream is = new FileInputStream("wordnet.config.xml");
 			dict = Dictionary.getInstance(is);
 		} catch (JWNLException e) {
 			e.printStackTrace();
@@ -54,11 +58,11 @@ public class WordNetAdapter implements Source {
 	@Override
 	public List<Entailment> getEntailments(Term t) throws SourceException {
 		try {
-			List<Entailment> entailments = new LinkedList<Entailment>();
+			Set<Entailment> entailments = new HashSet<Entailment>();
 			// use JWNL API to return entailmetns.
 			POS translated_pos = translatePOS(t.getPos());
 			if (translated_pos == null){
-				return entailments;
+				return new LinkedList<Entailment>(entailments);
 			}
 			IndexWord word = dict.lookupIndexWord(translated_pos, t.getTerm());
 			//System.out.println(word.getSenses()[0]);
@@ -67,14 +71,14 @@ public class WordNetAdapter implements Source {
 
 			if (word == null || word.getSenses().size() == 0) {
 			//	System.out.println(t.getTerm());
-				return entailments;
+				return new LinkedList<Entailment>(entailments);
 			}
 			// System.out.println(word);
 			for (Synset s : word.getSenses()) {
 				//System.out.println(s.getWords());
 				entailments.addAll((getSense(s, t, 1)));
 			}
-			return entailments;
+			return new LinkedList<Entailment>(entailments);
 		} catch (JWNLException e) {
 			System.out.println("caught Wordnet exception: "+ e);
 			System.out.println("continuing...");
@@ -98,9 +102,11 @@ public class WordNetAdapter implements Source {
 	 * @return a list of entailments
 	 * @throws JWNLException
 	 */
-    private List<Entailment> getSense(Synset s, Term t, double score) throws JWNLException {
-    	List<Entailment> entailments = new LinkedList<Entailment>();
-    	
+    private Set<Entailment> getSense(Synset s, Term t, double score) throws JWNLException {
+    	Set<Entailment> entailments = new HashSet<Entailment>();
+    	if (score < 0.5) {
+    		return entailments;
+    	}
     	for (Word hypernym : s.getWords()) {
         	// create an Entailment object
     		Term newTerm = new Term(hypernym.getLemma().replace("_", "-"),
@@ -110,8 +116,8 @@ public class WordNetAdapter implements Source {
     			Entailment ent = new Entailment(
         			t,
         			newTerm,
-        			new BigDecimal(score),
-        			this);
+        			score,
+        			getName());
         		// add Enailment to the return list
         		entailments.add(ent);
     		}
@@ -127,7 +133,7 @@ public class WordNetAdapter implements Source {
         return entailments;
     }
 
-    
+
     private Pos translatePOS(POS wnpos) {
     	if (wnpos == POS.NOUN) {
     		return Pos.NOUN;

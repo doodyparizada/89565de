@@ -1,23 +1,25 @@
 package lex;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class Sentence {
 	public Sentence(List<Word> words) {
 		this.words = words;
-		this.wordMap = new HashSet<Term>();
+		this.wordMap = new HashMap<Term,Term>();
 		for (Word w: words) {
-			wordMap.add(w.getTerm());	
+			wordMap.put(w.getTerm(),w.getTerm());
 		}
 	}
-	
-	private Set wordMap;
+
+	private Map<Term,Term> wordMap;
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(this.documentId+", ");
+		sb.append(this.sentenceId+", ");
 		for (Word w : words) {
 			sb.append(w.getTerm() + ", ");
 		}
@@ -27,18 +29,15 @@ public class Sentence {
 	public List<Word> getWords() {
 		return words;
 	}
-	
 
 	public boolean containsTerm(Term term) {
-		return wordMap.contains(term);
+		return wordMap.containsKey(term);
 	}
 
 	public Term getTerm(Term t) {
-		if (wordMap.contains(t)) {
-			// have to implememt XXX
-		}
+		return wordMap.get(t);
 	}
-	
+
 	public String getSentenceId() {
 		return sentenceId;
 	}

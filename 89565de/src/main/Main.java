@@ -15,6 +15,7 @@ import lex.SentenceEntailment;
 import parser.Parser;
 import source.DirectAdapter;
 import source.NaiveSource;
+import source.SourceException;
 import source.SourceFactory;
 import source.WordNetAdapter;
 
@@ -23,11 +24,13 @@ public class Main {
 	static final String TRAIN = "train";
 	static final String DECIDE = "decide";
 	static final String EVALUATE = "evaluate";
+	static final String TRAIN_EVALUATE = "train_evaluate";
 	static final String __TEST = "__test";
 	static final String USAGE =
 		"Usage: progname " + TRAIN + " <filename>" +
 		"\nOR   : progname " + DECIDE + " <filename> <resultFile> <ruleFile>" +
-		"\nOR   : progname " + EVALUATE + " <filename>";
+		"\nOR   : progname " + EVALUATE + " <filename>" +
+		"\nOR   : progname " + TRAIN_EVALUATE + " <filename>";
 	/**
 	 * @param args
 	 * @throws Exception
@@ -35,14 +38,18 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		boolean isTraining = false;
 		boolean isEvaluate = false;
+		boolean isTrain_Evaluate = false;
 		boolean is__test = false;
-		
+
 		// parse arguments:
 		if (args.length  < 2) {
 			throw new Exception(USAGE);
 		}
 		// train the classifier
-		if (args[0].equals(TRAIN)) {
+		if (args[0].equals(TRAIN_EVALUATE)) {
+			isTraining = true;
+			isTrain_Evaluate = true;
+		} else if (args[0].equals(TRAIN)) {
 			isTraining = true;
 		} else if (args[0].equals(DECIDE)) {
 			isTraining = false;
@@ -54,17 +61,22 @@ public class Main {
 		} else {
 			throw new Exception(USAGE);
 		}
-		
+		String filename = args[1];
 		// init lexical sources
 		SourceFactory sfact = SourceFactory.getInstance();
 		sfact.clear();
-		// DirectAdapter.register();
+		DirectAdapter.register();
 		WordNetAdapter.register();
 		NaiveSource.register();
-		
-		Parser parser = new Parser(args[1], isTraining);	//	"Processed_DevSet.txt"
+		System.out.println("after registrating");
+		// init parser
+		Parser parser = new Parser(filename, isTraining);	//	"Processed_DevSet.txt"
+
 		if (is__test) {
 			__test(parser);
+		} else if (isTrain_Evaluate) {
+			train(parser, 20);
+			evaluate(new Parser(filename, true),20);
 		} else if (isEvaluate) {
 			evaluate(parser);
 		} else if (isTraining) {
@@ -81,71 +93,74 @@ public class Main {
 		// create SentenceEntailment Objects
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
-			for (SentenceEntailment sentenceEntailment : sentenceEntailments) {
+			while (!sentenceEntailments.isEmpty()) {
+				SentenceEntailment sentenceEntailment = sentenceEntailments.remove(0);
+				sentenceEntailment.init();
 				List<Double> feats = sentenceEntailment.getFeatureScore();
 				total.addAll(feats);
 			}
 		}
 		System.out.println(total.size());
 		}
-	
+
 	static private void train(Parser parser) throws Exception {
+		train(parser,0);
+	}
+
+	static private void train(Parser parser, double percent) throws Exception {
 		Classifier classifier = new Svm();
 		List<SentenceEntailment> sentenceEntailments = null;
-
-		int stopCounter = 0;
-
 		// create SentenceEntailment Objects
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
-			for (SentenceEntailment sentenceEntailment : sentenceEntailments) {
+			int limit = (int)(sentenceEntailments.size()*percent/100.);
+			System.out.println("limit " + limit);
+			while (sentenceEntailments.size() > limit) {
+				SentenceEntailment sentenceEntailment = sentenceEntailments.remove(0);
+				sentenceEntailment.init();
 				List<Double> feats = sentenceEntailment.getFeatureScore();
 				// put in classifier
 				classifier.addLearningExample(feats, sentenceEntailment.DoesEntail());
-				/*stopCounter++;
-				if (stopCounter > 300) {
-					break;
-				}*/
 			}
-			/*if (stopCounter > 300) {
-				break;
-			}*/
+
 		}
 		classifier.createModel();
 	}
 
-	static private void decide(Parser parser, String resultsFileName, String rulesFileName) throws FileNotFoundException {
+	static private void decide(Parser parser, String resultsFileName, String rulesFileName) throws Exception {
 		Classifier classifier = new Svm();
 		classifier.readModelFromFile();
 		List<SentenceEntailment> sentenceEntailments = null;
 
-		List<SentenceEntailment> results = new LinkedList<SentenceEntailment>();
+		PrintStream resultsStream = new PrintStream(new FileOutputStream(new File(resultsFileName)));
+		PrintStream rulesStream = new PrintStream(new FileOutputStream(new File(rulesFileName)));
 
 		// create SentenceEntailment Objects
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
-			for (SentenceEntailment sentenceEntailment : sentenceEntailments) {
+			while (!sentenceEntailments.isEmpty()) {
+				SentenceEntailment sentenceEntailment = sentenceEntailments.remove(0);
+				sentenceEntailment.init();
 				List<Double> feats = sentenceEntailment.getFeatureScore();
 				// get classifiers decision
 				sentenceEntailment.setDecision(classifier.doesEntail(feats));
-				results.add(sentenceEntailment);
-			}
-		}
-		// output results
-		PrintStream resultsStream = new PrintStream(new FileOutputStream(new File(resultsFileName)));
-		PrintStream rulesStream = new PrintStream(new FileOutputStream(new File(rulesFileName)));
-		for (SentenceEntailment sentenceEntailment : results) {
-			// write to results file
-			resultsStream.println(sentenceEntailment.getOutputString());
-			// write to rule file
-			for (String rule : sentenceEntailment.getRuleStrings()) {
-				rulesStream.println(rule);
+				// output results
+				if (sentenceEntailment.DoesEntail()) {
+					resultsStream.println(sentenceEntailment.getOutputString());
+					// write to rule file
+					for (String rule : sentenceEntailment.getRuleStrings()) {
+						rulesStream.println(rule);
+					}
+				}
 			}
 		}
 	}
 
-
 	static private void evaluate(Parser parser) throws Exception {
+		evaluate(parser, 100);
+	}
+
+	static private void evaluate(Parser parser, double percent) throws Exception {
 		Classifier classifier = new Svm();
 		classifier.readModelFromFile();
 		List<SentenceEntailment> sentenceEntailments = null;
@@ -154,16 +169,22 @@ public class Main {
 		int foundEntailingCount = 0;
 		int correctEntailmentsCount = 0;
 
-		int stopCounter = 0;
-
 		// create SentenceEntailment Objects
 		while((sentenceEntailments = parser.next())!=null){
 			// generate Features
-			for (SentenceEntailment sentenceEntailment : sentenceEntailments) {
+			int limit = (int)(sentenceEntailments.size()*percent/100.);
+			System.out.println("limit " + limit);
+			while (sentenceEntailments.size() > limit) {
+				sentenceEntailments.remove(0);
+			}
+			while (!sentenceEntailments.isEmpty()) {
+				SentenceEntailment sentenceEntailment = sentenceEntailments.remove(0);
+				sentenceEntailment.init();
 				List<Double> feats = sentenceEntailment.getFeatureScore();
 
 				boolean foundEntailing = classifier.doesEntail(feats);
 				boolean doEntail = sentenceEntailment.DoesEntail();
+
 				if (doEntail) {
 					doEntailCount += 1;
 				}
@@ -173,23 +194,22 @@ public class Main {
 				if (doEntail && foundEntailing) {
 					correctEntailmentsCount += 1;
 				}
-				stopCounter++;
-				if (stopCounter > 300) {
-					break;
-				}
-			}
-			if (stopCounter > 300) {
-				break;
 			}
 
 		}
 
-		double recall = 100 * (double)(correctEntailmentsCount)/ doEntailCount;
-		double percision = 100 * (double)(correctEntailmentsCount) / foundEntailingCount;
-		double F1 = (2* recall * percision)/ (recall+percision);
+		double recall =  correctEntailmentsCount == 0.0 ? 0 : (100 * (double)(correctEntailmentsCount + EPSILON)/ (doEntailCount + EPSILON));
+		double percision = correctEntailmentsCount == 0.0 ? 0 : (100 * (double)(correctEntailmentsCount + EPSILON) / (foundEntailingCount  + EPSILON));
+		double F1 = correctEntailmentsCount == 0.0 ? 0 : ((2* recall * percision)/ (recall+percision));
+
 		System.out.println(
-				"Recall: " + recall  +
+				"doEntail: " + doEntailCount +
+				"\nfoundEntailingCount: " + foundEntailingCount +
+				"\ncorrectEntailmentsCount: " + correctEntailmentsCount +
+				"\nRecall: " + recall  +
 				"\nPercision: " + percision +
 				"\nF1: " + F1);
 	}
+
+	private static double EPSILON = Double.MIN_VALUE;
 }

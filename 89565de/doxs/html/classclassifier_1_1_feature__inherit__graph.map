@@ -1,0 +1,19 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classclassifier_1_1_direct_noun_feature.html" title="{classifier.DirectNounFeature\n||+ DirectNounFeature()\l}" alt="" coords="5,147,189,224"/>
+<area shape="rect" id="node5" href="$classclassifier_1_1_direct_verb_feature.html" title="{classifier.DirectVerbFeature\n||+ DirectVerbFeature()\l}" alt="" coords="214,147,396,224"/>
+<area shape="rect" id="node7" href="$classclassifier_1_1_naive_adjective_feature.html" title="{classifier.NaiveAdjectiveFeature\n||+ NaiveAdjectiveFeature()\l}" alt="" coords="421,147,624,224"/>
+<area shape="rect" id="node9" href="$classclassifier_1_1_naive_adverb_feature.html" title="{classifier.NaiveAdverbFeature\n||+ NaiveAdverbFeature()\l}" alt="" coords="649,147,839,224"/>
+<area shape="rect" id="node11" href="$classclassifier_1_1_naive_car_feature.html" title="{classifier.NaiveCarFeature\n||+ NaiveCarFeature()\l}" alt="" coords="863,147,1035,224"/>
+<area shape="rect" id="node13" href="$classclassifier_1_1_naive_c_feature.html" title="{classifier.NaiveCFeature\n||+ NaiveCFeature()\l}" alt="" coords="1059,147,1220,224"/>
+<area shape="rect" id="node15" href="$classclassifier_1_1_naive_d_feature.html" title="{classifier.NaiveDFeature\n||+ NaiveDFeature()\l}" alt="" coords="1245,147,1405,224"/>
+<area shape="rect" id="node17" href="$classclassifier_1_1_naive_noune_feature.html" title="{classifier.NaiveNouneFeature\n||+ NaiveNouneFeature()\l}" alt="" coords="1431,147,1620,224"/>
+<area shape="rect" id="node19" href="$classclassifier_1_1_naive_o_feature.html" title="{classifier.NaiveOFeature\n||+ NaiveOFeature()\l}" alt="" coords="1644,147,1807,224"/>
+<area shape="rect" id="node21" href="$classclassifier_1_1_naive_p_feature.html" title="{classifier.NaivePFeature\n||+ NaivePFeature()\l}" alt="" coords="1831,147,1992,224"/>
+<area shape="rect" id="node23" href="$classclassifier_1_1_naive_verb_feature.html" title="{classifier.NaiveVerbFeature\n||+ NaiveVerbFeature()\l}" alt="" coords="2017,147,2196,224"/>
+<area shape="rect" id="node25" href="$classclassifier_1_1_total_feature.html" title="{classifier.TotalFeature\n||+ score()\l}" alt="" coords="2220,147,2369,224"/>
+<area shape="rect" id="node27" href="$classclassifier_1_1_total_scoreless_feature.html" title="{classifier.TotalScorelessFeature\n||+ score()\l}" alt="" coords="2394,147,2600,224"/>
+<area shape="rect" id="node29" href="$classclassifier_1_1_word_net_adjective_feature.html" title="{classifier.WordNetAdjectiveFeature\n||+ WordNetAdjectiveFeature()\l}" alt="" coords="2625,147,2849,224"/>
+<area shape="rect" id="node31" href="$classclassifier_1_1_word_net_adverb_feature.html" title="{classifier.WordNetAdverbFeature\n||+ WordNetAdverbFeature()\l}" alt="" coords="2873,147,3084,224"/>
+<area shape="rect" id="node33" href="$classclassifier_1_1_word_net_noun_feature.html" title="{classifier.WordNetNounFeature\n||+ WordNetNounFeature()\l}" alt="" coords="3108,147,3311,224"/>
+<area shape="rect" id="node35" href="$classclassifier_1_1_word_net_verb_feature.html" title="{classifier.WordNetVerbFeature\n||+ WordNetVerbFeature()\l}" alt="" coords="3335,147,3533,224"/>
+</map>

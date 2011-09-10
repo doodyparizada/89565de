@@ -38,8 +38,4 @@ public enum Pos {
 	    	System.err.println("found unknown POS: " + name);
 	    	return null;
 	    }
-
-
-
-
 	}

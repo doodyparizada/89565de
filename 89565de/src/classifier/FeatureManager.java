@@ -42,7 +42,8 @@ public class FeatureManager {
 				new WordNetAdverbFeature(),
 				new DirectNounFeature(),
 				new DirectVerbFeature(),
-
+				new TotalFeature(),
+				new TotalScorelessFeature()
 
 				// add more features....
 		});
