@@ -68,10 +68,8 @@ public class Svm implements Classifier {
 	    try {
 			model = SVMLightModel.readSVMLightModelFromURL(new java.io.File(generateModelName()).toURI().toURL());
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

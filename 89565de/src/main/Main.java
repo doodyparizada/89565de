@@ -27,10 +27,16 @@ public class Main {
 	static final String TRAIN_EVALUATE = "train_evaluate";
 	static final String __TEST = "__test";
 	static final String USAGE =
-		"Usage: progname " + TRAIN + " <filename>" +
-		"\nOR   : progname " + DECIDE + " <filename> <resultFile> <ruleFile>" +
-		"\nOR   : progname " + EVALUATE + " <filename>" +
-		"\nOR   : progname " + TRAIN_EVALUATE + " <filename>";
+		"Usage: progname <source> " + TRAIN + " <filename>" +
+		"\nOR   : progname <source> " + DECIDE + " <filename> <resultFile> <ruleFile>" +
+		"\nOR   : progname <source> " + EVALUATE + " <filename>" +
+		"\nOR   : progname <source> " + TRAIN_EVALUATE + " <filename>" +
+		"\nsources available:" + 
+		"\nW - WordNet" + 
+		"\nD - Direct" + 
+		"\nN - Naive" + 
+		"\n\nYou have to choose at least one source out the three" + 
+		"For Example: progname WN " + DECIDE + "input.txt results.txt rules.txt";
 
 	/**
 	 * @param args
@@ -51,34 +57,40 @@ public class Main {
 		boolean is__test = false;
 
 		// parse arguments:
-		if (args.length  < 2) {
+		if (args.length  < 3) {
 			throw new UsageError();
 		}
 		// train the classifier
-		if (args[0].equals(TRAIN_EVALUATE)) {
+		if (args[1].equals(TRAIN_EVALUATE)) {
 			isTraining = true;
 			isTrain_Evaluate = true;
-		} else if (args[0].equals(TRAIN)) {
+		} else if (args[1].equals(TRAIN)) {
 			isTraining = true;
-		} else if (args[0].equals(DECIDE)) {
+		} else if (args[1].equals(DECIDE)) {
 			isTraining = false;
-		} else if (args[0].equals(EVALUATE)) {
+		} else if (args[1].equals(EVALUATE)) {
 			isTraining = true;
 			isEvaluate = true;
-		} else if (args[0].equals(__TEST)) {
+		} else if (args[1].equals(__TEST)) {
 			is__test = true;
 		} else {
 			throw new UsageError();
 		}
-		String filename = args[1];
+		String filename = args[2];
 		// init lexical sources
 		SourceFactory sfact = SourceFactory.getInstance();
 		sfact.clear();
 
-
-	//	DirectAdapter.register();
-		WordNetAdapter.register();
-		NaiveSource.register();
+		String sources = args[0];
+		if (sources.contains("D")) {
+			DirectAdapter.register();
+		}
+		if (sources.contains("W")) {
+			WordNetAdapter.register();
+		}
+		if (sources.contains("N")) {
+			NaiveSource.register();
+		}
 
 		// init parser
 		Parser parser = new Parser(filename, isTraining);
@@ -93,7 +105,7 @@ public class Main {
 		} else if (isTraining) {
 			train(parser);
 		} else {
-			decide(parser, args[2], args[3]);
+			decide(parser, args[3], args[4]);
 		}
 	}
 
